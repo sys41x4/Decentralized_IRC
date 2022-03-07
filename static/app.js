@@ -34,13 +34,14 @@ function detectMetaMask() {
 }
 
 function set_wallet_address(wallet_address) {
-    $.get("set_wallet/"+wallet_address, function(data, status){
-
-  });
+    fetch('/api/set_wallet',
+    {method:'POST',
+    headers:{'Content-type':'application/json','Wallet_address':wallet_address},
+    body:JSON.stringify({"wallet_address":wallet_address})})
 }
 
 function addOrder(wallet_address,tx,name,invoice_id) {
-    $.post("add_order/",
+    $.post("/api/add_order",
                         { wallet_address: wallet_address, tx: tx,name:name,invoice_id:invoice_id },
                          function(data, status){
                                 if(data == 'OK') {
