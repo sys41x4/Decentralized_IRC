@@ -33,11 +33,32 @@ function detectMetaMask() {
     }
 }
 
-function set_wallet_address(wallet_address) {
+
+
+
+$(document).ready(function() {
+    $('form').on('submit', function(event) {
+      $.ajax({
+         data : {
+            sender : $('#wallet_address').val(),
+            receiver: $('#receiver').val(),
+            message: $('#message').val(),
+                },
+            type : 'POST',
+            url : '/send_msg'
+           })
+       .done(function(data) {
+         $('#output').text(data.output).show();
+     });
+     event.preventDefault();
+     });
+});
+
+function set_wallet_address(wallet_address, receiver_address) {
     fetch('/api/set_wallet',
     {method:'POST',
-    headers:{'Content-type':'application/json','Wallet_address':wallet_address},
-    body:JSON.stringify({"wallet_address":wallet_address})})
+    headers:{'Content-type':'application/json','Wallet_address':wallet_address, 'Receiver_address':receiver_address},
+    body:JSON.stringify({"wallet_address":wallet_address, 'Receiver_address':receiver_address})})
 }
 
 function addOrder(wallet_address,tx,name,invoice_id) {
