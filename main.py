@@ -3,7 +3,7 @@ import time
 import os
 import subprocess
 # https://blog.logrocket.com/web3-py-tutorial-guide-ethereum-blockchain-development-with-python/
-from flask import Flask, render_template, request, url_for, redirect, flash, session
+from flask import Flask, jsonify, render_template, request, url_for, redirect, flash, session
 #from werkzeug.security import check_password_hash
 #from db import check_login, get_products, add_order_data, get_orders
 
@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'not_s0_secr3t'
 
 
-@app.route('/')
+#@app.route('/')
 # def index():
 #     products = get_products()
 #     return render_template('home.html', products=products)
@@ -35,13 +35,17 @@ app.config['SECRET_KEY'] = 'not_s0_secr3t'
 
 
 #@app.get('/wallet')
-@app.get('/')
-def set_wallet():
+
+@app.route('/',methods=['GET'])	#from @app.get to @app.route
+def home(): ## func name changed from `set_walle` to `home`
     return render_template('wallet.html')
 
 
-@app.get('/set_wallet/<wallet_address>')
-def set_wallet_session(wallet_address):
+@app.route('/api/set_wallet',methods=['POST']) #from @app.get to @app.route
+def set_wallet_session():
+    data = request.get_json()
+    print(data)
+    wallet_address = data['wallet_address']
     session['wallet_address'] = wallet_address
     print("Current MetaMask Wallet Address => ", wallet_address)
 
