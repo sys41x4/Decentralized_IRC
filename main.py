@@ -4,9 +4,11 @@ import os
 import subprocess
 # https://blog.logrocket.com/web3-py-tutorial-guide-ethereum-blockchain-development-with-python/
 from flask import Flask, jsonify, render_template, request, url_for, redirect, flash, session
+from websockets import Data
 # import flask_socketio
 #from werkzeug.security import check_password_hash
 #from db import check_login, get_products, add_order_data, get_orders
+#from . import utils
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'not_s0_secr3t'
@@ -46,11 +48,12 @@ def home(): ## func name changed from `set_walle` to `home`
 def message():
     return render_template('send_message.html')
 
-@app.route('/send_msg',methods= ['POST'])
+@app.route('/api/send_msg',methods= ['POST'])
 def send_msg():
-    sender = request.form['sender']
-    receiver = request.form['receiver']
-    message = request.form['message']
+    data = request.get_json()
+    sender = data['sender']
+    receiver =  data['receiver']
+    message = data['message']
     output = sender + ' --> ' + receiver + ' | ' + message
     print({'sender':sender, 'receiver':receiver, 'message':message})
     if sender and receiver and message:
