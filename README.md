@@ -1,2 +1,2 @@
 # Decentralized_IRC
-Decentralized IRC [web3 | IPFS]
+Webified Decentralized IRC [web3 | IPFS]
