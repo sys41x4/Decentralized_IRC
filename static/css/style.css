@@ -18,3 +18,12 @@
 .meta-normal {
     -webkit-filter: grayscale(0);
 }
+.container{
+    padding: 1%;
+    border: 3px solid #202124;
+    border-radius: 2%;
+    background-color: #8ab4f8;
+}
+body{
+    background-color: #202124;
+}

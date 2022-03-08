@@ -1,5 +1,6 @@
 let currentAccount = null;
 const MERCHANT_ACCOUNT = '0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9'
+let g_wallet_address = null
 
 
 /**
@@ -37,15 +38,18 @@ function detectMetaMask() {
 
 
 $(document).ready(function() {
-    $('form').on('submit', function(event) {
+    $('#send-message').on('submit', function(event) {
       $.ajax({
-         data : {
-            sender : $('#wallet_address').val(),
+         data : JSON.stringify({
+            sender : g_wallet_address,
             receiver: $('#receiver').val(),
             message: $('#message').val(),
-                },
+                }),
             type : 'POST',
-            url : '/send_msg'
+            url : '/api/send_msg',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {'Wallet_Address':g_wallet_address}
            })
        .done(function(data) {
          $('#output').text(data.output).show();
@@ -55,6 +59,7 @@ $(document).ready(function() {
 });
 
 function set_wallet_address(wallet_address, receiver_address) {
+    g_wallet_address = wallet_address
     fetch('/api/set_wallet',
     {method:'POST',
     headers:{'Content-type':'application/json','Wallet_address':wallet_address, 'Receiver_address':receiver_address},
