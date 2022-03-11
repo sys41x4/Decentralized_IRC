@@ -44,6 +44,11 @@ def home(): ## func name changed from `set_walle` to `home`
     return render_template('wallet.html')
 
 
+@app.route('/account',methods=['GET']) # Added function for sending message
+def account():
+    return render_template('account.html')
+    
+
 @app.route('/message',methods=['GET']) # Added function for sending message
 def message():
     return render_template('send_message.html')
