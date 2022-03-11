@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&family=Space+Mono&display=swap');
+
 .lbl {
     text-align: right;
     width: 100px;
@@ -18,11 +20,22 @@
 .meta-normal {
     -webkit-filter: grayscale(0);
 }
+
+.regular-text {
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+}
+
+.bold-heading {
+    color: #fff;
+    font-family: 'Secular One', sans-serif;
+}
+
 .container{
     padding: 1%;
     border: 3px solid #202124;
     border-radius: 2%;
-    background-color: #8ab4f8;
+    background-color: #202124;
 }
 body{
     background-color: #202124;
