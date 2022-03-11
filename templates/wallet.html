@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <div style="margin-top:30px" class="row">
+<div class="container">
+<div style="margin-top:30px" class="row">
     <div class="col-md-5 offset-3">
         <form method="post">
-            <div class="form-group">
+            <div class="form-group regular-text ">
                 <label for="wallet_address">Your Wallet address is</label>
                 <input readonly name="wallet_address" type="text" class="form-control" id="wallet_address">
             </div>
@@ -15,11 +16,11 @@
 <div style="margin-top:30px" class="row">
     <div class="col-md-5 offset-3">
         <form id="send-message" method="post">
-            <div class="form-group">
+            <div class="form-group regular-text ">
                 <label for="receiver-address">Receiver's Wallet address</label>
                 <input id="receiver" type="text" class="form-control">
             </div>
-            <div>
+            <div class="regular-text">
                 <label for="message">Message</label>
             </div>
             <div>
@@ -30,5 +31,6 @@
             </div>
         </form>
     </div>
+</div>
 </div>
 {% endblock %}
