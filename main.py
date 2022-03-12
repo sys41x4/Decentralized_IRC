@@ -2,6 +2,7 @@ import json
 import time
 import os
 import subprocess
+import binascii
 # https://blog.logrocket.com/web3-py-tutorial-guide-ethereum-blockchain-development-with-python/
 from flask import Flask, jsonify, render_template, request, url_for, redirect, flash, session
 from websockets import Data
@@ -58,7 +59,7 @@ def send_msg():
     data = request.get_json()
     sender = data['sender']
     receiver =  data['receiver']
-    message = data['message']
+    message = binascii.hexlify(data['message'].encode()).decode()
     output = sender + ' --> ' + receiver + ' | ' + message
     print({'sender':sender, 'receiver':receiver, 'message':message})
     if sender and receiver and message:
@@ -69,10 +70,15 @@ def send_msg():
         "From" : sender,
         "To" : receiver,
         "Block" : '<Previous Block Number>+1',
-        "Time" : time.time(),
+        "Timestamp" : time.time(),
+        "Parent-Hash" : "Previous Transaction Hash",
         "Txn-Hash" : 'New_Hash(<Previous Txn-Hash>+<New File Hash>)',
+        "Mined-by" : 'Miner-Hash',
+        "Charge" : 'Price-For-messaging [Free/Paid]',
+        "Size" : "Data-Size",
+        "Nonce" : "Nonce-Value",
         "Comment" : message,
-        "Result" : 'Success'
+        "Status" : "<Success/UnSuccess>"
         }
 
         with open(Txn_Hash, 'w') as test_file:
