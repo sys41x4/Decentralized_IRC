@@ -1,3 +1,6 @@
 flask
 web3
 eth_tester
+psycopg2
+sqlalchemy
+pandas
