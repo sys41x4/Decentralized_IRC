@@ -77,6 +77,15 @@ function addOrder(wallet_address,tx,name,invoice_id) {
                                 }
     });
 }
+function getmessage(download=false){
+    url = "/api/messages"
+    if(download){
+        window.open(url + "?download=true","_blank")
+    }
+    fetch(url,{method:"GET"})
+    .then(response => {return response.json()})
+    .then(data => {console.log(JSON.stringify(data))})
+}
 
 function handleAccountsChanged(accounts) {
     console.log('Calling HandleChanged')
