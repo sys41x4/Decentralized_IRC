@@ -94,7 +94,7 @@ def send_msg():
         "Size" : "Data-Size",
         "Nonce" : "Nonce-Value",
         "Comment" : message,
-        "Status" : "<Success/UnSuccess>"
+        "Status" : "<0/1>"
         }
     
         with open(Txn_Hash, 'w') as test_file:
