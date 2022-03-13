@@ -4,16 +4,24 @@ import os
 import subprocess
 import binascii
 # https://blog.logrocket.com/web3-py-tutorial-guide-ethereum-blockchain-development-with-python/
-from flask import Flask, jsonify, render_template, request, url_for, redirect, flash, session
+from flask import Flask, jsonify, render_template, request, url_for, redirect, flash, session, Response
+from matplotlib.pyplot import close
+from prompt_toolkit import application
 from websockets import Data
+import psycopg2
 # import flask_socketio
 #from werkzeug.security import check_password_hash
 #from db import check_login, get_products, add_order_data, get_orders
 #from . import utils
 
+## Flask Configurations
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'not_s0_secr3t'
 
+## Database configuration
+#def db_conn():
+#    conn = psycopg2.connect(host="localhost",database="flask_db",user=os.environ['DB_USERNAME'],password=os.environ['DB_PASSWORD'])
+#    return conn
 
 #@app.route('/')
 # def index():
@@ -25,7 +33,13 @@ app.config['SECRET_KEY'] = 'not_s0_secr3t'
 # def login():
 #     return render_template('login.html')
 
-
+## Check if user is logged in
+def is_authed():
+    if 'wallet_address' in session['wallet_address']:
+        wallet_address = session['Wallet_address']
+        return True
+    else:
+        return Response(jsonify('{"Error":"Unauthenticated"}',status=401))
 # @app.post('/logged_in')
 # def logged_in():
 #     email = request.form.get('email')
@@ -54,6 +68,8 @@ def account():
 def message():
     return render_template('send_message.html')
 
+## Send Message API
+
 @app.route('/api/send_msg',methods= ['POST'])
 def send_msg():
     data = request.get_json()
@@ -78,16 +94,17 @@ def send_msg():
         "Size" : "Data-Size",
         "Nonce" : "Nonce-Value",
         "Comment" : message,
-        "Status" : "<1/0>"
+        "Status" : "<0/1>"
         }
-
+    
         with open(Txn_Hash, 'w') as test_file:
             test_file.write(json.dumps(block_data))
 
         # os.popen('node put-files.js --token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGExMjU1MURGNUMxNzZmNDU0Y2EwRjQ1NUE0NUFjMjg4ODgzRjIwYzMiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NDYwNzU4NjY2NzQsIm5hbWUiOiJpcmMtdG9rZW4xIn0.sF0bUr8lwfr1e9-Yuv6-wJun1vP0JvKnR61sq7rMaTc test_data.json').read()
-    
+        print('uploading file to IPFS')
         ## Upload Conversation File ##
         Upload_file = subprocess.Popen(["node", "put-files.js", "--token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGExMjU1MURGNUMxNzZmNDU0Y2EwRjQ1NUE0NUFjMjg4ODgzRjIwYzMiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NDYwNzU4NjY2NzQsIm5hbWUiOiJpcmMtdG9rZW4xIn0.sF0bUr8lwfr1e9-Yuv6-wJun1vP0JvKnR61sq7rMaTc", Txn_Hash], stdout=subprocess.PIPE, shell=True)
+        print('file uploaded')
         (CID_byte, err) = Upload_file.communicate()
         CID = CID_byte.decode().replace('\n','').split(": ")[1]
         # Get the uploaded File -> https://<CID>+.ipfs.dweb.link/<FileName>
@@ -171,6 +188,28 @@ def set_wallet_session():
 #     #user_orders = session['wallet_address']
 #     print(user_orders)
 #     return render_template('orders.html', orders=user_orders)
+
+## API to Retrieve Data from DB
+
+@app.route('/api/messages',methods=['GET'])
+def return_message():
+    # Initiate DB connection
+    #conn = db_conn()
+    #cur = conn.cursor()
+    #cur.execute(f'SELECT * FROM messages WHERE wallet_address = {wallet_address};')
+    #messages = cur.fetchall()
+    #cur.close()
+    #conn.close()
+
+    # test
+
+    messages = json.dumps({"block_no":"block_no","wallet_id":"sender_address","receiver_address":"receiver_address","txnhash":"txnhash","CID":"CID","asd":"asdasd","currentblockhash":"currentblockhash"})
+    if request.args.get('download') == "true":
+        return Response(messages,headers={'Content-Disposition':'attachment; filename=data.json'},mimetype='application/json')
+    else:
+        return Response(messages,mimetype='application/json')
+
+
 
 
 if __name__ == '__main__':
