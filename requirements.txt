@@ -4,3 +4,4 @@ eth_tester
 psycopg2
 sqlalchemy
 pandas
+eth-brownie
