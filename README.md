@@ -10,6 +10,32 @@ Webified Decentralized IRC [web3 | IPFS]
 
 Use `npm install` in current directory **Decentralized_IRC** to install modules
 
+### Setup postgresql [Heroku]
+
+Download heroku-cli from `https://devcenter.heroku.com/articles/heroku-cli#get-started-with-the-heroku-cli`
+
+```bash
+heroku login [For using Browser Mode Verification]
+heroku login -i [For using Terminal Mode Verification]
+
+mkdir <Directory_Name>
+cd <Directory_Name>
+
+heroku authorizations:create
+
+# For mac-os/linux
+export HEROKU_API_KEY=<your_token>
+
+# For windows | Temporary Assign
+set HEROKU_API_KEY=<your_token>
+
+heroku create irc-postgresql-hasher
+
+heroku addons:create heroku-postgresql:hobby-dev
+
+heroku config:get DATABASE_URL --app irc-postgresql-hasher
+```
+
 ### Check List
 
 - [ ] Create seperate Account Page
