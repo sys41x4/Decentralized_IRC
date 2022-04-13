@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+<div style="margin-top:30px" class="row">
+    <div class="col-md-5 offset-3">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group regular-text ">
+                <label for="wallet_address">Your Wallet address is</label>
+                <input readonly name="wallet_address" type="text" class="form-control" id="wallet_address">
+                <label id='status'></label>
+                <!-- <label id='output'></label> -->
+            </div>
+        <center><button id="enableMetamask" type="button" class="btn btn-secondary  mb-2">Connect with MetaMask</button></center>
+
+        </form>
+    </div>
+</div>
+<div style="margin-top:30px" class="row">
+    <div class="col-md-5 offset-3">
+        <form id="send-message" method="post">
+            {% csrf_token %}
+            <div class="form-group regular-text ">
+                <label for="receiver-address">Receiver's Wallet address</label>
+                <input id="receiver" type="text" class="form-control">
+            </div>
+            <div class="regular-text">
+                <label for="message">Message</label>
+            </div>
+            <div>
+               <textarea class="form-control" id="message"></textarea>
+            </div>
+            <div>
+                <!-- Send Paid Message -->
+                <input style="margin-top: 30px" data-price=0 data-name="message" class="btn btn-primary btn-lg btn-block btn-buy" type="submit" value="Send">
+                
+                <!-- Send Free Message -->
+                <input style="margin-top: 30px" class="btn btn-primary btn-lg btn-block btn-success" type="submit" value="Send Free Message">
+            </div>
+            <!-- <label id='output'></label> -->
+        </form>
+        <!-- <div style="margin-top:30px" class="row">
+            <div class="col-md-5 offset-3">
+                <form method="post">
+                    <div class="form-group regular-text ">
+                        <label id='output'></label>
+                    </div>
+                    </form>
+                </div>
+            </div>               -->
+    </div>
+</div>
+</div>
+{% endblock %}

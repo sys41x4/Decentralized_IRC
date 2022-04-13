@@ -1,1 +1,59 @@
-{% block page_content %}{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Webified Decentralized IRC</title>
+    {% load static %}
+    <!--- basic page needs
+    ================================================== -->
+    <!-- <meta charset="utf-8"> -->
+    <!-- <title>Knox - Particles</title> -->
+    <meta name="description" content="">
+    <meta name="author" content="Arijit-Bhowmick">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- favicons
+    ================================================== -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://avatars.githubusercontent.com/u/66935336?v=4">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://avatars.githubusercontent.com/u/66935336?v=4">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://avatars.githubusercontent.com/u/66935336?v=4">
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+
+
+    <!-- Style-Sheet Files -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel= "stylesheet" type= "text/css" href= "{% static 'css/style.css' %}">
+    <link rel= "stylesheet" type= "text/css" href= "{% static 'css/account.css' %}">
+
+    <!-- Style-Sheet Files | HomePage | -->
+
+
+    <!-- JS Files -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/ethjs-unit.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/3.0.0-rc.5/web3.min.js" integrity="sha512-jRzb6jM5wynT5UHyMW2+SD+yLsYPEU5uftImpzOcVTdu1J7VsynVmiuFTsitsoL5PJVQi+OtWbrpWq/I+kkF4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    
+
+    <!-- JS Files | HomePage | -->
+
+</head>
+<body>
+    <!-- test messages API -->
+    <a href="javascript:getmessage()">Get message ajax</a>
+    <a href="javascript:getmessage(download=true)">Get message download</a>
+
+    {% block content %}{% endblock %}
+</body>
+</html>
