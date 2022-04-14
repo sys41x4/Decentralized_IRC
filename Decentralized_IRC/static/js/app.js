@@ -63,7 +63,7 @@ function set_wallet_address(wallet_address) {
     g_wallet_address = wallet_address
     fetch('/api/set_wallet',
     {method:'POST',
-    headers:{'Content-type':'application/x-www-form-urlencoded','Wallet_address':wallet_address},
+    headers:{'Content-type':'application/json','Wallet_address':wallet_address},
     body:JSON.stringify({"wallet_address":wallet_address})})
 }
 
@@ -116,8 +116,8 @@ $(document).ready(function() {
             type : 'POST',
             url : '/api/send_msg',
             dataType: 'json',
-            // contentType: 'application/json',
-            contentType: 'application/x-www-form-urlencoded',
+            contentType: 'application/json',
+            //contentType: 'application/x-www-form-urlencoded',
             headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val()}
            })
        .done(function(data) {
