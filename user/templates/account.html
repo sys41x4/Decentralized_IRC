@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="limiter">
+    <div class="account-info">
+        <div class="wrap-account-info">
+            <form class="account-info-form validate-form" method="post">
+                <span class="account-info-form-logo">
+                    <i class="zmdi zmdi-landscape"></i>
+                </span>
+
+                <span class="account-info-form-title bold-heading p-b-34 p-t-27 ">
+                    Account DETAILS
+                </span>
+
+                <div class="wrap-info-input validate-input regular-text">
+                    <label for="wallet_address">Your Wallet address is</label><br>
+                    <input readonly name="wallet_address" type="text" class="form-control" id="wallet_address">
+                </div>
+
+                <div class="regular-text">
+                    <table>
+                    <tr>
+                        <th scope="row">Total Messages SEND</th>
+                        <td>Test_Data</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">FREE Messages SEND</th>
+                        <td>Test_Data</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">PAID Messages SEND</th>
+                        <td>Test_Data</td>
+                    </tr>
+                    </table>
+                </div>
+                <!-- Task still left to implement -->
+                <!--
+                Implement Function for handling POST Request
+                Implement Function for handling "Download Data" 
+                For Example api request may be {wallet_address:<wallet_address>, <Download_Your_Data:<True/False OR 1/0>}
+                -->
+                
+                <div>
+                    <input style="margin-top: 30px" class="btn btn-primary btn-lg btn-block" type="submit" value="Download Your Data">
+                </div>
+            </form>
+
+            <div>
+                <input style="margin-top: 30px; background-color: #3ba55d;" class="btn btn-primary btn-lg btn-block" onclick="history.back()" value="Back">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
