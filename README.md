@@ -39,11 +39,13 @@ python manage.py startapp <app_name>
 ---
 ### WebApp links and functionalities
 
-User Message UI available at `http://ip:port/user/message`
-User Account UI available at `http://ip:port/user/account`
+Homepage available at `http://<ip>:<port>`<br><br>
 
-api's are available at `http://ip:port/api/set_wallet`
-                       `http://ip:port/api/send_msg`
+User Message UI available at `http://<ip>:<port>/user/message` <br>
+User Account UI available at `http://<ip>:<port>/user/account` <br><br>
+
+api's are available at `http://<ip>:<port>/api/set_wallet` <br>
+emsp;emsp;emsp;emsp;emsp;emsp;`http://<ip>:<port>/api/send_msg`
 
 
 ---
@@ -75,22 +77,11 @@ Functions to add :/
 │   ├── asgi.py
 │   ├── __init__.py
 │   ├── settings.py
-│   ├── static
-│   │   ├── css
-│   │   │   ├── account.css
-│   │   │   ├── style.css
-│   │   │   ├── styles.css
-│   │   │   └── vendor.css
-│   │   └── js
-│   │       ├── app.js
-│   │       ├── ethjs-unit.min.js
-│   │       ├── main.js
-│   │       ├── particle-settings.js
-│   │       ├── particles.min.js
-│   │       └── plugins.js
 │   ├── templates
-│   │   └── base.html
+│   |   ├── base.html
+│   │   └── homepage.html
 │   ├── urls.py
+│   ├── views.py
 │   └── wsgi.py
 ├── manage.py
 ├── node_modules/
@@ -99,6 +90,19 @@ Functions to add :/
 ├── put-files.js
 ├── README.md
 ├── requirements.txt
+├── static
+│   ├── css
+│   │   ├── account.css
+│   │   ├── style.css
+│   │   ├── styles.css
+│   │   └── vendor.css
+│   └── js
+│       ├── app.js
+│       ├── ethjs-unit.min.js
+│       ├── main.js
+│       ├── particle-settings.js
+│       ├── particles.min.js
+│       └── plugins.js
 ├── Txn-Hash
 └── user
     ├── admin.py
