@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from user.models import user
 
+def homepage(request):
+    return render(request, 'homepage.html')
+    
 def user_dashboard(request):
     # Message = user.objects.all()
     # context = {

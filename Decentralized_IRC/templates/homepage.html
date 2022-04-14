@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>Webified Decentralized IRC</title>
+    <meta name="description" content="">
+    <meta name="author" content="Arijit-Bhowmick">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="static/css/vendor.css">
+    <link rel="stylesheet" href="static/css/styles.css">
+
+    <!-- favicons
+    ================================================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://avatars.githubusercontent.com/u/66935336?v=4">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://avatars.githubusercontent.com/u/66935336?v=4">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://avatars.githubusercontent.com/u/66935336?v=4">
+
+</head>
+
+<body id="top" class="ss-preload theme-particles">
+
+
+    <!-- preloader
+    ================================================== -->
+    <div id="preloader">
+        <div id="loader" class="dots-fade">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+
+    <!-- intro
+    ================================================== -->
+    <section id="intro" class="s-intro">
+
+        <div id="particles-js" class="s-intro__particles"></div>
+
+        <header class="s-intro__header"> 
+            <div class="s-intro__logo">
+                <a class="logo" href="">
+                    <img src="https://avatars.githubusercontent.com/u/66935336?v=4" alt="Homepage">
+                </a>
+            </div>
+        </header>  <!-- s-intro__header -->
+        <br><br>
+        <div class="row s-intro__content">
+            <div class="column">
+
+                <div class="text-pretitle">
+                    Nice to meet you.
+                </div>
+
+                <h1 class="text-huge-title">
+                We are preparing <br>
+                something exciting <br>
+                & amazing for you.
+                </h1>
+
+                <div class="s-intro__content-bottom">
+
+                    <div class="s-intro__content-bottom-block">
+                        <h5>Time is Precious :)</h5>
+                        <!-- <p>Date/Time: <span id="datetime"></span></p> -->
+                        <div class="counter">
+                            <span id="time"></span>  
+                        </div>  <!-- end counter -->
+
+                    </div> <!-- end s-intro-content__bottom-block -->
+
+                    <div class="s-intro__content-bottom-block">
+
+                        <h5>Developers</h5>
+
+                        <ul class="social">
+                            <li><a href="">Arijit Bhowmick [sys41x4]</a></li>
+                            <li><a href="">Suraj Disoja [ninetyn1ne]</a></li>
+                        </ul>
+
+                    </div> <!-- end s-intro-content__bottom-block -->
+
+                </div> <!-- end s-intro-content__bottom -->
+
+            </div>
+        </div> <!-- s-intro__content -->
+
+        <div class="s-intro__notify">
+            <button id="dashboard" type="button" class="btn--stroke btn--small ss-modal-trigger">
+                Dashboard
+            </button>
+        </div> <!-- s-intro__notify -->
+        <!-- <div class="s-intro__notify">
+            <button type="button" class="btn--stroke btn--small ss-modal-trigger">
+                Notify Me
+            </button>
+        </div>  -->
+        <!-- s-intro__notify -->
+
+        <!-- <div hidden class="s-intro__modal ss-modal">
+            <div class="ss-modal__inner">
+
+                <span class="ss-modal__close"></span>
+
+                <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><path d="M.5 4.5l7 4 7-4m-13-3h12a1 1 0 011 1v10a1 1 0 01-1 1h-12a1 1 0 01-1-1v-10a1 1 0 011-1z" stroke="var(--color-2-dark)"></path></svg>
+                
+                <h4>Sign Up</h4>
+
+                <p class="ss-modal__text">
+                Be the first to know about the latest updates and
+                get exclusive offer on our grand opening.
+                </p>
+
+                <form id="mc-form" class="mc-form">
+                    <input type="email" name="EMAIL" id="mce-EMAIL" class="u-fullwidth text-center" placeholder="Email Address" title="The domain portion of the email address is invalid (the portion after the @)." pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*(\.\w{2,})+$" required>
+                    <input type="submit" name="subscribe" value="Subscribe" class="btn--small btn--primary u-fullwidth"> -->
+                    <!-- <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_cdb7b577e41181934ed6a6a44_9a91cfe7b3" tabindex="-1" value=""></div> -->
+                    <!-- <div class="mc-status"></div>
+                </form> -->
+
+            <!-- </div>  -->
+            <!-- end ss-modal__inner -->
+        <!-- </div>  -->
+        <!-- end ss-modal -->
+
+        <div class="s-intro__scroll">
+            <a href="#hidden" class="smoothscroll">
+                Scroll For More
+            </a>
+        </div> <!-- s-intro__scroll -->
+
+    </section> <!-- end s-intro -->
+
+
+    <!-- hidden element
+    ================================================== -->
+    <div id="hidden" aria-hidden="true" style="opacity: 0;"></div>
+
+
+    <!-- details
+    ================================================== -->
+    <section id="details" class="s-details">
+
+        <div class="row">
+            <div class="column">
+
+                <h1 class="text-huge-title text-center">
+                    Hi, We Are Security Researcher from INDIA <span class="iconify" data-icon="emojione-v1:flag-for-india"></span>
+                </h1>
+
+                <nav class="tab-nav">
+                    <ul class="tab-nav__list"> 
+                        <li class="active" data-id="tab-about">
+                            <a href="#0">
+                                <span>About</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab-services">
+                                <span>Services</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab-contact">
+                                <span>Contact</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav> <!-- end tab-nav -->
+
+                <div class="tab-content">
+
+                    <!-- 01 - tab about -->
+                    <div id="tab-about" class='tab-content__item'>
+
+                        <div class="row tab-content__item-header">
+                            <div class="column">
+                                <h2>Our Story.</h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="column">
+                                <p class="lead">
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                </p>
+
+                                <p>
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                </p>
+
+                                <div class="row">
+                                    <div class="column lg-6 tab-12">
+                                        <h4>More About Us.</h4>
+                                        <p>
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                        
+                                        </p>
+                                    </div>
+                                    <div class="column lg-6 tab-12">
+                                        <h4>Get the OpenSource Project</h4>
+                                        <p>
+                                        Want to Review the Code ?<br>
+                                        Want to get inspired from it ?<br>
+                                        Want to Contribute ?<br><br>
+
+                                        You can get the Project Link from here
+                                        </p>
+                                        <a href="https://github.com/Arijit-Bhowmick/Decentralized_IRC" class="btn btn--stroke u-fullwidth">Source Code</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div> <!-- end 01 - tab about -->
+
+                    <!-- 02 - tab Developers Detail -->
+                    <div id="tab-services" class='tab-content__item'>
+
+                        <div class="row tab-content__item-header">
+                            <div class="column">
+                                <h2>Who We Are ?</h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="column">
+                                <p class="lead">
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row services-list block-lg-one-half block-md-one-half block-tab-whole">
+
+                            <div class="column services-list__item">
+                                <div class="services-list__item-content">
+                                    <h4 class="item-title">Arijit Bhowmick</h4>
+                                    <img src="https://avatars.githubusercontent.com/u/62654117?v=4">
+                                    <p>
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+                                    </p>
+                                </div>
+                            </div>
+                
+                            <div class="column services-list__item">
+                                <div class="services-list__item-content">
+                                    <h4 class="item-title">Suraj Disoja</h4>
+                                    <img src="https://scontent-maa2-1.xx.fbcdn.net/v/t39.30808-6/234727446_1025037064922428_717583014681401890_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=Ql0YHt2LI7YAX_ufp34&tn=JjlX7Zcmvh96KUuE&_nc_ht=scontent-maa2-1.xx&oh=00_AT-mXa0PXZJzSmfsZEmuoo6uSal1LGSYyz4t6QQwOckN0w&oe=625D7D79">
+                                    <p>
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    </p>
+                                </div>
+                            </div>
+                
+                        </div> <!-- end services-list -->
+                        
+                    </div> <!-- end 02 - tab services -->
+
+                    <!-- 03 - tab contact -->
+                    <div id="tab-contact" class="tab-content__item">
+
+                        <div class="row tab-content__item-header">
+                            <div class="column">
+                                <h2>Get in Touch.</h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="column">
+                                
+                                <p class="lead">
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                                    AAAAAAAAAAAAAAAAAAAAAAA
+                                </p>
+
+                                <div class="row">
+                                    <div class="column lg-6 tab-12">
+                                        <h4>Arijit Bhowmick</h4>
+                
+                                        <ul class="link-list">
+                                            <li><a href="https://www.linkedin.com/in/sys41x4">LinkedIn</a></li>
+                                            <li><a href="https://github.com/Arijit-Bhowmick/">GitHub</a></li>
+                                            <li><a href="https://github.com/sys41x4/">GitHub</a></li>
+                                            <li><a href="https://twitter.com/sys41x4">Twitter</a></li>
+                                            <li><a href="https://instagram.com/sys41x4">Instagram</a></li>
+                                        </ul>
+                
+                                    </div>
+                
+                                    <div class="column lg-6 tab-12">
+                                        <h4>Suraj Disoja</h4>
+                
+                                        <ul class="link-list">
+                                            <li><a href="https://www.linkedin.com/in/surajdisoja99/">LinkedIn</a></li>
+                                            <li><a href="https://github.com/ninetyn1ne/">GitHub</a></li>
+                                            <li><a href="https://twitter.com/ninetyn1ne_">Twitter</a></li>
+                                            <li><a href="https://www.instagram.com/suraj_disoja99/">Instagram</a></li>
+                                        </ul>
+                
+                                    </div>
+                                </div>
+
+                                <!-- <p class="tab-content__item-bottom">
+                                    <a href="mailto:#0" class="contact-email">email</a>
+                                    <span class="contact-number"> 
+                                        <a href="tel:91999999999">+91 999999999</a> 
+                                        <span>/</span>
+                                        <a href="tel:91999999999">+91 999999999</a> 
+                                    </span>
+                                </p> -->
+
+                            </div>
+                        </div>
+                        
+                    </div> <!-- end 03 - tab contact -->
+
+                </footer>
+
+            </div>
+        </div>
+
+        <div class="ss-go-top">
+            <a class="smoothscroll" title="Back to Top" href="#top">
+                <span>Back to Top</span>
+                <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><path d="M7.5 1.5l.354-.354L7.5.793l-.354.353.354.354zm-.354.354l4 4 .708-.708-4-4-.708.708zm0-.708l-4 4 .708.708 4-4-.708-.708zM7 1.5V14h1V1.5H7z" fill="currentColor"></path></svg>
+             </a>
+        </div> <!-- end ss-go-top -->
+
+    </section> <!-- end s-details -->
+
+
+    <!-- Java Script
+    ================================================== -->
+    <script src="static/js/plugins.js"></script>
+    <script src="static/js/main.js"></script>
+    <script src="static/js/particles.min.js"></script>
+    <script src="static/js/particle-settings.js"></script>
+    <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+
+</body>
+
+</html>
