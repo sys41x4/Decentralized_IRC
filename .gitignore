@@ -1,0 +1,4 @@
+node_modules/
+Decentralized_IRC/__pycache__/
+user/__pycache__/
+api/__pycache__/
