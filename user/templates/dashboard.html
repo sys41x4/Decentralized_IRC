@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+@import "bourbon";
+
+body {
+	font-family: 'Open Sans', "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.5em;
+	font-weight: 400;
+}
+
+p, span, a, ul, li, button {
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+}
+
+strong {
+	font-weight: 600;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Open Sans', "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+	line-height: 1.5em;
+	font-weight: 300;	
+}
+
+p, strong {
+
+  color: #fff;	
+}
+
+.tile {  
+  width: 100%;
+	display: inline-block;
+	box-sizing: border-box;
+	background: #fff;		
+	padding: 20px;
+	margin-bottom: 10px;
+    margin-top: 0px;
+		
+}
+  
+.purple, .blue, .red, .orange, .green {
+    color: #fff;
+  }
+  
+.purple:hover {
+    filter: brightness(100%);
+}
+
+.purple {
+    background: #5133AB;
+    filter: brightness(80%);
+}
+
+.red:hover {
+    filter: brightness(100%);
+  }
+
+.red {
+    background: #AC193D;
+    filter: brightness(80%);
+} 
+.green:hover {
+    filter: brightness(100%);	
+  }
+
+.green {
+    background: #00A600;
+    filter: brightness(80%);
+}
+.blue:hover {
+    filter: brightness(100%);
+  }
+
+.blue {
+    background: #2672EC;
+    filter: brightness(80%);
+} 
+.orange:hover {
+    filter: brightness(100%);
+  }
+
+.orange {
+    background: #DC572E;
+    filter: brightness(80%);
+}
+
+</style>
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>
+          <strong>Dashboard</strong>
+        </h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+          <a href="message" class="tile purple">
+            <h3 class="title">Message</h3>
+            <p>Send web3 based messages to individual/groups</p>
+          </a>
+      </div>
+      <div class="col-sm-4">
+          <a href="account" class="tile orange">
+            <h3 class="title">Account</h3>
+            <p>Your Account Details</p>
+          </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+          <a href="#" class="tile green">
+            <h3 class="title">Download Your Data</h3>
+            <p>Get data about what we have about you :)</p>
+          </a>
+      </div>
+      <div class="col-sm-4">
+          <a href="javascript:history.back()" class="tile red">
+            <h3 class="title">&lt;&lt; Back</h3>
+            <p>Go Back to Previous WebPage</p>
+          </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
