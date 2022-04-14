@@ -15,7 +15,7 @@ import json
 @csrf_exempt
 def send_msg(request):
     # Message = api.objects.all()
-    if request.method == "POST":
+    if request.method == "POST" and request.content_type == "application/json":
        #return HttpResponse("OK hey")
         data = json.loads(request.body)
         # print(request.POST)
@@ -72,17 +72,20 @@ def send_msg(request):
     # }
     
     #return render(request, 'message_index.html', context)
-    return HttpResponse("OK")
+    else:
+        return HttpResponseBadRequest('Invalid Request')
 # @csrf_protect
 @csrf_exempt
 def set_wallet_session(request):
     # Message = api.objects.get(pk=pk)
     # Message = api.objects.all()
-    if request.method == 'POST':
+    if request.method == 'POST' and request.content_type == "application/json":
         data = json.loads(request.body)
         wallet_address = data['wallet_address']
     #session['wallet_address'] = wallet_address
     # context = {
     #     'message': Message
     # }
-    return HttpResponse("OK")
+        return HttpResponse("OK")
+    else:
+        return HttpResponseBadRequest('Invalid Request')
