@@ -53,3 +53,67 @@ Functions to add :/
 1. Add CSRF protection
    1. Currently application is having issues with handling csrf POST requests in api addresses
         so it is running without csrf verification for now
+
+---
+
+## File/Directory Structure
+```
+.
+├── api
+│   ├── admin.py
+│   ├── apps.py
+│   ├── __init__.py
+│   ├── migrations
+│   │   ├── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── basic_working.txt
+├── db.sqlite3
+├── Decentralized_IRC
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── static
+│   │   ├── css
+│   │   │   ├── account.css
+│   │   │   ├── style.css
+│   │   │   ├── styles.css
+│   │   │   └── vendor.css
+│   │   └── js
+│   │       ├── app.js
+│   │       ├── ethjs-unit.min.js
+│   │       ├── main.js
+│   │       ├── particle-settings.js
+│   │       ├── particles.min.js
+│   │       └── plugins.js
+│   ├── templates
+│   │   └── base.html
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── node_modules/
+├── package.json
+├── package-lock.json
+├── put-files.js
+├── README.md
+├── requirements.txt
+├── Txn-Hash
+└── user
+    ├── admin.py
+    ├── apps.py
+    ├── __init__.py
+    ├── migrations
+    │   └── __init__.py
+    ├── models.py
+    ├── templates
+    │   ├── account.html
+    │   ├── index.html
+    │   ├── message.html
+    │   ├── orders.html
+    │   └── send_message.html
+    ├── tests.py
+    ├── urls.py
+    └── views.py
+```
