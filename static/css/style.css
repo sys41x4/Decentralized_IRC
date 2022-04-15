@@ -1,37 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Secular+One&family=Space+Mono&display=swap');
 
-/* Table Formating */
-
-/* spacing */
-
-table {
-    table-layout:auto;
-    width: 100%;
-    /* border: 3px solid purple; */
-}
-
-thead th:nth-child(1) {
-    width: 30%;
-}
-
-thead th:nth-child(2) {
-    width: 20%;
-}
-
-thead th:nth-child(3) {
-    width: 15%;
-}
-
-thead th:nth-child(4) {
-width: 35%;
-}
-
-th, td {
-    padding: 20px;
-}
-
-/* Table Formating END */
-
 .lbl {
     text-align: right;
     width: 100px;
