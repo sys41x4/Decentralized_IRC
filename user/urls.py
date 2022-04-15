@@ -6,5 +6,6 @@ urlpatterns = [
     path("message", views.message_page, name="message_page"),
     path("account", views.user_account, name="user_account"),
     path("homepage", views.homepage, name="homepage"),
+    path("betamsg", views.beta_message, name="beta_message"),
 
 ]

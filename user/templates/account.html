@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
+
+<link rel= "stylesheet" type= "text/css" href= "{% static 'css/account.css' %}">
 
 <div class="limiter">
     <div class="account-info">
         <div class="wrap-account-info">
             <form class="account-info-form validate-form" method="post">
-                <span class="account-info-form-logo">
+                <!-- <span class="account-info-form-logo">
                     <i class="zmdi zmdi-landscape"></i>
-                </span>
+                </span> -->
+                <img src="https://avatars.githubusercontent.com/u/66935336?v=4" class="account-info-form-logo" alt="">
 
                 <span class="account-info-form-title bold-heading p-b-34 p-t-27 ">
                     Account DETAILS
@@ -49,7 +53,7 @@
             </form>
 
             <div>
-                <input style="margin-top: 30px; background-color: #3ba55d;" class="btn btn-primary btn-lg btn-block" onclick="history.back()" value="Back">
+                <input style="margin-top: 30px; background-color: #3ba55d; border-color: #3ba55d;" class="btn btn-primary btn-lg btn-block" onclick="history.back()" value="Back">
             </div>
         </div>
     </div>
