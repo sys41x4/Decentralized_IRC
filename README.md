@@ -42,7 +42,7 @@ python manage.py startapp <app_name>
 Homepage available at `http://<ip>:<port>`<br><br>
 
 User Message UI available at `http://<ip>:<port>/user/message` <br>
-User Beta Message UI available at `http://<ip>:<port>/user/beta_msg` <br>
+User Beta Message UI available at `http://<ip>:<port>/user/betamsg` <br>
 User Account UI available at `http://<ip>:<port>/user/account` <br><br>
 
 api's are available at `http://<ip>:<port>/api/set_wallet` <br>
