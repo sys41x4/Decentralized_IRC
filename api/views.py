@@ -72,7 +72,7 @@ def send_msg(request):
     # }
     
     #return render(request, 'message_index.html', context)
-    return HttpResponse("OK")
+    return JsonResponse({'request':200})
 # @csrf_protect
 @csrf_exempt
 def set_wallet_session(request):
@@ -85,4 +85,4 @@ def set_wallet_session(request):
     # context = {
     #     'message': Message
     # }
-    return HttpResponse("OK")
+    return JsonResponse({'request':200})
