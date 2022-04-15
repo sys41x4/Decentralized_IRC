@@ -42,6 +42,7 @@ python manage.py startapp <app_name>
 Homepage available at `http://<ip>:<port>`<br><br>
 
 User Message UI available at `http://<ip>:<port>/user/message` <br>
+User Beta Message UI available at `http://<ip>:<port>/user/beta_msg` <br>
 User Account UI available at `http://<ip>:<port>/user/account` <br><br>
 
 api's are available at `http://<ip>:<port>/api/set_wallet` <br>
@@ -78,6 +79,8 @@ Functions to add :/
 │   ├── __init__.py
 │   ├── settings.py
 │   ├── templates
+│   |   ├── 404.html
+│   |   ├── 500.html
 │   |   ├── base.html
 │   │   └── homepage.html
 │   ├── urls.py
@@ -93,17 +96,19 @@ Functions to add :/
 ├── static
 │   ├── css
 │   │   ├── account.css
+│   │   ├── beta_msg.css
 │   │   ├── style.css
 │   │   ├── styles.css
 │   │   └── vendor.css
 │   └── js
 │       ├── app.js
+│       ├── beta_msg.js
 │       ├── ethjs-unit.min.js
 │       ├── main.js
 │       ├── particle-settings.js
 │       ├── particles.min.js
 │       └── plugins.js
-├── Txn-Hash
+├── txn_hashes
 └── user
     ├── admin.py
     ├── apps.py
@@ -113,6 +118,9 @@ Functions to add :/
     ├── models.py
     ├── templates
     │   ├── account.html
+    │   ├── beta_msg.html
+    │   ├── dashboard.html
+    │   ├── homepage.html
     │   ├── index.html
     │   ├── message.html
     │   ├── orders.html
