@@ -45,7 +45,7 @@ def send_msg(request):
         # Commented the upload data to IPFS functions
         # After testing the paid transactions, the Free Transactions can be implemented
 
-            with open(Txn_Hash, 'w') as test_file:
+            with open('txn_hashes/'+Txn_Hash, 'w') as test_file:
                 test_file.write(json.dumps(block_data))
 
             # os.popen('node put-files.js --token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGExMjU1MURGNUMxNzZmNDU0Y2EwRjQ1NUE0NUFjMjg4ODgzRjIwYzMiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NDYwNzU4NjY2NzQsIm5hbWUiOiJpcmMtdG9rZW4xIn0.sF0bUr8lwfr1e9-Yuv6-wJun1vP0JvKnR61sq7rMaTc test_data.json').read()
