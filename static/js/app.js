@@ -18,6 +18,25 @@ function makeid(length) {
    return result;
 }
 
+// get cookie Value by name
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrf_token = getCookie('csrftoken');
+
 function utf8ToHex(str) {
       return Array.from(str).map(c =>
         c.charCodeAt(0) < 128 ? c.charCodeAt(0).toString(16) :
@@ -63,7 +82,7 @@ function set_wallet_address(wallet_address) {
     g_wallet_address = wallet_address
     fetch('/api/set_wallet',
     {method:'POST',
-    headers:{'Content-type':'application/x-www-form-urlencoded','Wallet_address':wallet_address},
+    headers:{'Content-type':'application/json','Wallet_address':wallet_address,'X-CSRFToken':csrf_token},
     body:JSON.stringify({"wallet_address":wallet_address})})
 }
 
@@ -116,9 +135,9 @@ $(document).ready(function() {
             type : 'POST',
             url : '/api/send_msg',
             dataType: 'json',
-            // contentType: 'application/json',
-            contentType: 'application/x-www-form-urlencoded',
-            headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val()}
+            contentType: 'application/json',
+            //contentType: 'application/x-www-form-urlencoded',
+            headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
            })
        .done(function(data) {
          $('#output').text(data.output).show();
