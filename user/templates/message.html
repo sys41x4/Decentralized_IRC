@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+{% load static %}
+<script src="{% static 'js/wallet_handlers/phantom.js' %}"></script>
+
 <div class="container">
 <div style="margin-top:30px" class="row">
     <div class="col-md-5 offset-3">
@@ -9,10 +13,11 @@
             <div class="form-group regular-text ">
                 <label for="wallet_address">Your Wallet address is</label>
                 <input readonly name="wallet_address" type="text" class="form-control" id="wallet_address">
+                <!-- <input readonly name="solana_wallet_address" type="text" class="form-control" id="solana_wallet_address" > -->
                 <label id='status'></label>
                 <!-- <label id='output'></label> -->
             </div>
-        <center><button id="enableMetamask" type="button" class="btn btn-secondary  mb-2">Connect with MetaMask</button></center>
+        <center><button id="enableMetamask" onclick="window.location.reload();" type="button" class="btn btn-secondary  mb-2">Connect with Wallet</button></center>
 
         </form>
     </div>

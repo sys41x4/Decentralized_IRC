@@ -21,6 +21,13 @@ def message_page(request):
     }
     return render(request, 'message.html', context)
 
+def metamask_message_page(request):
+    Message = user.objects.all()
+    context = {
+        'message': Message
+    }
+    return render(request, 'metamask_message.html', context)
+
 def user_account(request):
     # Message = message.objects.get(pk=pk)
     Message = user.objects.all()
