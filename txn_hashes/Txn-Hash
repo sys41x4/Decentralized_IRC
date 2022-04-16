@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+{"From": "5a5mY2WJb8wdvvTmqRLVukS8q4XP2isooQsaUzMugEF7", "To": "aaa", "Block": "<Previous Block Number>+1", "Timestamp": 1650104306.18498, "Parent-Hash": "Previous Transaction Hash", "Txn-Hash": "New_Hash(<Previous Txn-Hash>+<New File Hash>)", "Mined-by": "Miner-Hash", "Charge": "Price-For-messaging [Free/Paid]", "Size": "Data-Size", "Nonce": "Nonce-Value", "Comment": "626262", "Status": "<0/1>"}
+=======
 {"From": "0x68237960f18f2b3a1555a39cd3427c52b98ad10b", "To": "0x68237960f18F2b3a1555a39Cd3427c52B98AD10B", "Block": "<Previous Block Number>+1", "Timestamp": 1650091085.114119, "Parent-Hash": "Previous Transaction Hash", "Txn-Hash": "New_Hash(<Previous Txn-Hash>+<New File Hash>)", "Mined-by": "Miner-Hash", "Charge": "Price-For-messaging [Free/Paid]", "Size": "Data-Size", "Nonce": "Nonce-Value", "Comment": "617364617364", "Status": "<0/1>"}
+>>>>>>> a257fcc4d3f9d255063a6a4a6d610792ff15d4d2
