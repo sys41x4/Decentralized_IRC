@@ -12,7 +12,11 @@ import subprocess
 import json
 
 @csrf_protect
+<<<<<<< HEAD
 # @csrf_exempt
+=======
+#@csrf_exempt
+>>>>>>> a257fcc4d3f9d255063a6a4a6d610792ff15d4d2
 def send_msg(request):
     # Message = api.objects.all()
     if request.method == "POST":
@@ -74,7 +78,11 @@ def send_msg(request):
     #return render(request, 'message_index.html', context)
     return JsonResponse({'request':200})
 @csrf_protect
+<<<<<<< HEAD
 # @csrf_exempt
+=======
+#@csrf_exempt
+>>>>>>> a257fcc4d3f9d255063a6a4a6d610792ff15d4d2
 def set_wallet_session(request):
     # Message = api.objects.get(pk=pk)
     # Message = api.objects.all()
