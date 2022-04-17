@@ -14,7 +14,69 @@
 <link rel= "stylesheet" type= "text/css" href= "{% static 'css/style.css' %}">
 <link rel= "stylesheet" type= "text/css" href= "{% static 'css/beta_msg.css' %}">
 
-<div id="frame">
+
+
+
+
+
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"> 
+<style>
+    .wallet-access-chk {
+    width: auto;
+    margin: auto;
+    /* max-width: 640px; */
+    font-family: 'VT323', monospace;
+    /* background: #0414a7; */
+    /* padding-top: 10%; */
+    }
+
+    .neg {
+        text-align: center;
+        color: rgba(128, 255, 128, 0.8);
+    }
+
+    .bg {
+    background: #ffffff03;
+    padding: 0 15px 2px 13px;
+    }
+
+    .nav {
+    margin-top: 35px;
+    text-align: center;
+    }
+
+    .link{
+        color: #2672EC;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 0 9px 2px 8px;
+    }
+
+    .link:hover, .link:focus{
+        background: #161818;
+        color: #c8c8c8;
+        text-decoration: none !important;
+    }
+	#status {
+		font-size: 34pt;
+		display: block;
+		margin-bottom: 50px;
+		color: #e80202;
+	}
+</style>
+
+
+
+
+<div class="wallet-access-chk container">
+    <h1 class="neg bg" id='status'>Connecting with the Wallet ...</h1>
+    <div class="neg" id="wallet-not-connect" style="display: none;">
+        <p id="status-detail">Please Connect with the Wallet to send Messages</p>
+            <a onclick="window.location.reload();" class="link">Connect with Wallet</a>&nbsp;|&nbsp;<a href="javascript:history.back()" class="link">&lt;&lt; Back</a>
+    </div>
+</div>
+
+<div id="frame" class="message-ui" style="display: none;">
 	<div id="sidepanel">
 		<div id="profile">
 			<div class="wrap">
@@ -224,4 +286,6 @@
 <!-- <script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script> -->
 <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
 <script src="{% static 'js/beta_msg.js' %}"></script>
+<script src="{% static 'js/wallet_handlers/metamask.js' %}"></script>
+
 {% endblock %}

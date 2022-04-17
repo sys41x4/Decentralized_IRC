@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Secular+One&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&family=Space+Mono&display=swap&family=VT323&display=swap');
 
 .lbl {
     text-align: right;
@@ -33,9 +33,9 @@
 
 .container{
     padding: 1%;
-    border: 3px solid #202124;
+    /* border: 3px solid #202124; */
     border-radius: 2%;
-    background-color: #202124;
+    /* background-color: #202124; */
 }
 body{
     background-color: #202124;
