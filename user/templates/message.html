@@ -2,7 +2,9 @@
 {% block content %}
 {% load static %}
 <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
-<script src="{% static 'js/wallet_handlers/phantom.js' %}"></script>
+<!-- <script src="{% static 'js/wallet_handlers/phantom.js' %}"></script> -->
+<script src="{% static 'js/wallet_handlers/metamask.js' %}"></script>
+
 
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"> 
 <style>
@@ -96,7 +98,7 @@
                 </div>
                 <div>
                     <!-- Send Paid Message -->
-                    <input style="margin-top: 30px" data-price=0 data-name="message" class="btn btn-primary btn-lg btn-block btn-buy" type="submit" value="Send">
+                    <input style="margin-top: 30px" data-price=0 data-name="message" class="btn btn-primary btn-lg btn-block paid-msg" type="submit" value="Send">
                     
                     <!-- Send Free Message -->
                     <input style="margin-top: 30px" class="btn btn-primary btn-lg btn-block btn-success" type="submit" value="Send Free Message">

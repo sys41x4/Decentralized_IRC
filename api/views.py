@@ -14,6 +14,10 @@ import subprocess
 import json
 
 @csrf_protect
+def access_chk(request):
+    return JsonResponse({'Response Code':200})
+
+@csrf_protect
 #@csrf_exempt
 def send_msg(request):
     msg_status = 'FAILED'
