@@ -130,6 +130,14 @@ function connect() {
 
 $(document).ready(function() {
     $('#send-message').on('submit', function(event) {
+
+        // If message == '' then it will not send request to the api
+        message = $('#message').val();
+         
+        if($.trim(message) == '') {
+            return false;
+        }
+
       $.ajax({
          data : JSON.stringify({
             sender : g_wallet_address,
@@ -144,7 +152,25 @@ $(document).ready(function() {
             headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
            })
        .done(function(data) {
-         $('#output').text(data.output).show();
+        $('#output').text(data.output).show();
+
+        // Show Message Status Success/Failure
+        if (data.error != undefined){
+            console.log(data.error);
+        }
+
+        document.getElementById("msg-send-confirm").textContent = data.msg_status;
+        document.getElementById("msg-send-confirm").style.color = data.color;
+        setTimeout(function() {
+            document.getElementById("msg-send-confirm").textContent = '';
+        }, 1000);
+        
+
+        
+        $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+        $('#message').val(null);
+        $('.contact.active .preview').html('<span>You: </span>' + message);
+        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
      });
      console.log("Entering to Tx send zone")
      event.preventDefault();

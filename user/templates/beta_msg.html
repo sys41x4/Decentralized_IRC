@@ -215,11 +215,13 @@
 			<button id="settings" type="button" class="btn--stroke btn--small ss-modal-trigger"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
 		</div>
 	</div>
+	
 	<div class="content">
 		<div class="contact-profile">
             <img id="profile-img" src="https://scontent-maa2-1.xx.fbcdn.net/v/t39.30808-6/234727446_1025037064922428_717583014681401890_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=Ql0YHt2LI7YAX_ufp34&tn=JjlX7Zcmvh96KUuE&_nc_ht=scontent-maa2-1.xx&oh=00_AT-mXa0PXZJzSmfsZEmuoo6uSal1LGSYyz4t6QQwOckN0w&oe=625D7D79" alt="" />
 			<!-- <img src="https://scontent-maa2-1.xx.fbcdn.net/v/t39.30808-6/234727446_1025037064922428_717583014681401890_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=Ql0YHt2LI7YAX_ufp34&tn=JjlX7Zcmvh96KUuE&_nc_ht=scontent-maa2-1.xx&oh=00_AT-mXa0PXZJzSmfsZEmuoo6uSal1LGSYyz4t6QQwOckN0w&oe=625D7D79" alt="" /> -->
 			<p>Suraj Disoja</p>
+			<!-- <h1 id='msg-send-confirm' style="text-align: center;"></h1> -->
 			<div class="social-media">
                 <!-- <i id="rcvr_wallet" onclick="show_wallet_addr_list()" class='fas fa-wallet'></i> -->
 				<!-- <a class="btn" onclick="pop()">Show Box</a> -->
@@ -229,6 +231,7 @@
 					<a class="rcvr-wallet-lst-close" onclick="wallet_addr_list()">X</a><br>
 			        <h1>Receiver Wallet Address List</h1>
 				</div>
+				<div id="msg-send-confirm"><h1></h1></div>
 				<!-- <a class="trigger_popup_fricc">Click here to show the popup</a> -->
 
 				<!-- <i class="fa fa-twitter" aria-hidden="true"></i> -->
@@ -272,20 +275,28 @@
 				</li>
 			</ul>
 		</div>
-		<div class="message-input">
-			<div class="wrap">
-                <input type="text" placeholder="Write your message..." />
-                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                <button class="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-                <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                
+		
+			
+			<div class="message-input">
+				<form  id="send-message"  method="post">
+					{% csrf_token %}
+				<div class="wrap">
+					<input id="receiver" type="text">
+					<input id="message" type="text" placeholder="Write your message..." />
+					<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+					<button class="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+					<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				
+				</div>
+		</form>
+
 			</div>
-		</div>
 	</div>
+	
 </div>
 <!-- <script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script> -->
 <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
 <script src="{% static 'js/beta_msg.js' %}"></script>
-<script src="{% static 'js/wallet_handlers/metamask.js' %}"></script>
+<script src="{% static 'js/wallet_handlers/phantom.js' %}"></script>
 
 {% endblock %}
