@@ -2,7 +2,9 @@ let currentAccount = null;
 // const MERCHANT_ACCOUNT = '0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9'
 let g_wallet_address = null
 
-
+let wallet_name = 'Wallet';
+let price = 0;
+// let msg_type = 'free';
 /**
     To Generate a random ID
     source:- https://stackoverflow.com/a/1349426/275002
@@ -128,8 +130,99 @@ function connect() {
     });
 }
 
+
+function get_api_response(err_occur){
+    if(err_occur == 1){
+        document.getElementById("msg-send-confirm").textContent = 'FAILED';
+        document.getElementById("msg-send-confirm").style.color = '#e74c3c';
+        setTimeout(function() {
+            document.getElementById("msg-send-confirm").textContent = '';
+        }, 1000);
+        err_occur = 0;
+    }
+    else if (err_occur == 0){
+        message = $('#message').val();
+
+        $.ajax({
+            data : JSON.stringify({
+               sender : g_wallet_address,
+               receiver: $('#receiver').val(),
+               message: $('#message').val(),
+                   }),
+               type : 'POST',
+               url : '/api/send_msg',
+               dataType: 'json',
+               contentType: 'application/json',
+               //contentType: 'application/x-www-form-urlencoded',
+               headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
+              })
+          .done(function(data) {
+           $('#output').text(data.output).show();
+    
+           // Show Message Status Success/Failure
+           if (data.error != undefined){
+               console.log(data.error);
+           }
+    
+           document.getElementById("msg-send-confirm").textContent = data.msg_status;
+           document.getElementById("msg-send-confirm").style.color = data.color;
+    
+           setTimeout(function() {
+               document.getElementById("msg-send-confirm").textContent = '';
+           }, 1000);
+           
+    
+           
+           $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+           $('#message').val(null);
+           $('.contact.active .preview').html('<span>You: </span>' + message);
+           $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+        });
+    };
+    
+}
+
+
 $(document).ready(function() {
+
     $('#send-message').on('submit', function(event) {
+
+        $.ajax({
+            data : JSON.stringify({
+                chk_access : 'api'
+                   }),
+               type : 'POST',
+               url : '/api/access_chk',
+               dataType: 'json',
+               contentType: 'application/json',
+               //contentType: 'application/x-www-form-urlencoded',
+               headers: {'chk-access' : 'api', 'X-CSRFToken':csrf_token}
+              })
+          .done(function(data) {});
+
+        // // If message == '' then it will not send request to the api
+        // let name = $(this).data("name")
+        // message = $('#message').val();
+         
+        // if($.trim(message) == '') {
+        //     return false;
+        // }
+        // console.log('Message Type', msg_type)
+        // // err_occur = 0;
+        // if (msg_type!='paid'){
+        //     get_api_response(err_occur);
+        // }
+
+        console.log("Entering to Tx send zone")
+        event.preventDefault();
+     });
+    
+    
+    $('.free-msg').click(function() {
+        get_api_response(0);
+    });
+
+    $('.paid-msg').click(function() {
 
         // If message == '' then it will not send request to the api
         message = $('#message').val();
@@ -138,43 +231,56 @@ $(document).ready(function() {
             return false;
         }
 
-      $.ajax({
-         data : JSON.stringify({
-            sender : g_wallet_address,
-            receiver: $('#receiver').val(),
-            message: $('#message').val(),
-                }),
-            type : 'POST',
-            url : '/api/send_msg',
-            dataType: 'json',
-            contentType: 'application/json',
-            //contentType: 'application/x-www-form-urlencoded',
-            headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
-           })
-       .done(function(data) {
-        $('#output').text(data.output).show();
 
-        // Show Message Status Success/Failure
-        if (data.error != undefined){
-            console.log(data.error);
+        price = $(this).data("price")
+        wallet_name = $(this).data("name")
+        // msg_type = $(this).data("msg_type")
+        // console.log(name,price)
+        eth_wei = ethUnit.toWei(price, 'ether');
+        console.log('RESULT ='+eth_wei)
+        console.log('Wallet ='+currentAccount)
+        console.log('RESULT IN HEX ='+eth_wei.toString(16))
+        let invoice_id = 'INV-'+makeid(5)
+        console.log(invoice_id)
+
+        const transactionParameters = {
+              nonce: '0x00', // ignored by MetaMask
+              gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+              gas: '0x22710', // customizable by user during MetaMask confirmation.
+              to: $('#receiver').val(), // Required except during contract publications.
+              from: g_wallet_address, // must match user's active address.
+              value: eth_wei.toString(16),
+              data:utf8ToHex($('#message').val()),
+              chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+        };
+            console.log(transactionParameters)
+            
+        if(currentAccount != null) {
+            document.getElementById("msg-send-confirm").textContent = 'Processing ...';
+            document.getElementById("msg-send-confirm").style.color = '#f1c40f';
+            const txHash = ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [transactionParameters],
+            })
+            .then(function(tx){
+                console.log('Transaction Hash ='+tx)
+                console.log('Wallet Inside ='+g_wallet_address)
+                console.log('Product Name ='+wallet_name)
+                console.log('Invoice ID = '+invoice_id)
+                console.log('Message = '+$('#message').val())
+                get_api_response(0)
+                // addOrder(currentAccount,tx,name,invoice_id)
+            })
+            .catch((error) => {
+                console.log('Error during the transaction')
+                console.log(error);
+                get_api_response(1)
+
+            });
+            // 
         }
 
-        document.getElementById("msg-send-confirm").textContent = data.msg_status;
-        document.getElementById("msg-send-confirm").style.color = data.color;
-        setTimeout(function() {
-            document.getElementById("msg-send-confirm").textContent = '';
-        }, 1000);
-        
-
-        
-        $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-        $('#message').val(null);
-        $('.contact.active .preview').html('<span>You: </span>' + message);
-        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-     });
-     console.log("Entering to Tx send zone")
-     event.preventDefault();
-     });
+    });
 
     //  m = detectMetaMask()
     // if(m) {
@@ -193,50 +299,61 @@ $(document).ready(function() {
     //     connect()
     // });
 
-     $('.btn-buy').click(function() {
-        let price = $(this).data("price")
-        let name = $(this).data("name")
-        console.log(name,price)
-        eth_wei = ethUnit.toWei(price, 'ether');
-        console.log('RESULT ='+eth_wei)
-        console.log('Wallet ='+currentAccount)
-        console.log('RESULT IN HEX ='+eth_wei.toString(16))
-        let invoice_id = 'INV-'+makeid(5)
-        console.log(invoice_id)
-
-        const transactionParameters = {
-              nonce: '0x00', // ignored by MetaMask
-              gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-              gas: '0x22710', // customizable by user during MetaMask confirmation.
-              to: $('#receiver').val(), // Required except during contract publications.
-              from: g_wallet_address, // must match user's active address.
-              value: eth_wei.toString(16),
-              data:utf8ToHex($('#message').val()),
-              chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-            };
-            console.log(transactionParameters)
-            
-            if(currentAccount != null) {
-                const txHash = ethereum.request({
-                 method: 'eth_sendTransaction',
-                 params: [transactionParameters],
-                })
-                .then(function(tx){
-                    console.log('Transaction Hash ='+tx)
-                    console.log('Wallet Inside ='+g_wallet_address)
-                    console.log('Product Name ='+name)
-                    console.log('Invoice ID = '+invoice_id)
-                    console.log('Message = '+$('#message').val())
-                    addOrder(currentAccount,tx,name,invoice_id)
-                })
-                .catch((error) => {
-                    console.log('Error during the transaction')
-                    console.log(error)
-                });
-            }
-
-    });
+     
 });
+
+
+// function paid_msg(name, price){
+
+//     // If message == '' then it will not send request to the api
+//     message = $('#message').val();
+        
+//     if($.trim(message) == '') {
+//         return false;
+//     }
+
+
+//     // let price = $(this).data("price")
+//     // let name = $(this).data("name")
+//     console.log(name,price)
+//     eth_wei = ethUnit.toWei(price, 'ether');
+//     console.log('RESULT ='+eth_wei)
+//     console.log('Wallet ='+currentAccount)
+//     console.log('RESULT IN HEX ='+eth_wei.toString(16))
+//     let invoice_id = 'INV-'+makeid(5)
+//     console.log(invoice_id)
+
+//     const transactionParameters = {
+//             nonce: '0x00', // ignored by MetaMask
+//             gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+//             gas: '0x22710', // customizable by user during MetaMask confirmation.
+//             to: $('#receiver').val(), // Required except during contract publications.
+//             from: g_wallet_address, // must match user's active address.
+//             value: eth_wei.toString(16),
+//             data:utf8ToHex($('#message').val()),
+//             chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+//         };
+//         console.log(transactionParameters)
+        
+//         if(currentAccount != null) {
+//             const txHash = ethereum.request({
+//                 method: 'eth_sendTransaction',
+//                 params: [transactionParameters],
+//             })
+//             .then(function(tx){
+//                 console.log('Transaction Hash ='+tx)
+//                 console.log('Wallet Inside ='+g_wallet_address)
+//                 console.log('Product Name ='+name)
+//                 console.log('Invoice ID = '+invoice_id)
+//                 console.log('Message = '+$('#message').val())
+//                 // addOrder(currentAccount,tx,name,invoice_id)
+//             })
+//             .catch((error) => {
+//                 console.log('Error during the transaction')
+//                 console.log(error)
+//             });
+//         }
+// }
 
 $( document ).ready(function() {
 
