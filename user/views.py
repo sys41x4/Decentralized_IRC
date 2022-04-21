@@ -28,3 +28,11 @@ def user_account(request):
         'message': Message
     }
     return render(request, 'account.html', context)
+
+# Test for solana
+def solana_test(request):
+    Message = user.objects.all()
+    context = {
+        'message': Message
+    }
+    return render(request, 'solana.html', context)
