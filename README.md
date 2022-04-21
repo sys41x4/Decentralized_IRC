@@ -107,8 +107,12 @@ Functions to add :/
 │       ├── main.js
 │       ├── particle-settings.js
 │       ├── particles.min.js
-│       └── plugins.js
+│       ├── plugins.js
+│       └── wallet_handlers
+│           ├── metamask.js
+│           └── phantom.js
 ├── txn_hashes
+|   └── Txn-Hash
 └── user
     ├── admin.py
     ├── apps.py
@@ -123,6 +127,7 @@ Functions to add :/
     │   ├── homepage.html
     │   ├── index.html
     │   ├── message.html
+    │   ├── metamask_message.html
     │   ├── orders.html
     │   └── send_message.html
     ├── tests.py

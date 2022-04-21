@@ -1,55 +1,120 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+<!-- <script src="{% static 'js/wallet_handlers/phantom.js' %}"></script> -->
+<script src="{% static 'js/wallet_handlers/metamask.js' %}"></script>
 
-<div class="container">
-<div style="margin-top:30px" class="row">
-    <div class="col-md-5 offset-3">
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group regular-text ">
-                <label for="wallet_address">Your Wallet address is</label>
-                <input readonly name="wallet_address" type="text" class="form-control" id="wallet_address">
-                <label id='status'></label>
-                <!-- <label id='output'></label> -->
-            </div>
-        <center><button id="enableMetamask" type="button" class="btn btn-secondary  mb-2">Connect with MetaMask</button></center>
 
-        </form>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"> 
+<style>
+    .wallet-access-chk {
+    width: auto;
+    margin: auto;
+    /* max-width: 640px; */
+    font-family: 'VT323', monospace;
+    /* background: #0414a7; */
+    padding-top: 10%;
+    }
+
+    .neg {
+        text-align: center;
+        color: rgba(128, 255, 128, 0.8);
+    }
+
+    .bg {
+    background: #ffffff03;
+    padding: 0 15px 2px 13px;
+    }
+
+    .nav {
+    margin-top: 35px;
+    text-align: center;
+    }
+
+    .link{
+        color: #2672EC;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 0 9px 2px 8px;
+    }
+
+    .link:hover, .link:focus{
+        background: #161818;
+        color: #c8c8c8;
+        text-decoration: none !important;
+    }
+    #status {
+		font-size: 34pt;
+		display: block;
+		margin-bottom: 50px;
+		color: #e80202;
+	}
+</style>
+
+
+
+
+<div class="wallet-access-chk container">
+    <h1 class="neg bg" id='status'>Connecting with the Wallet ...</h1>
+    <div class="neg" id="wallet-not-connect" style="display: none;">
+        <p id="status-detail">Please Connect with the Wallet to send Messages</p>
+            <a onclick="window.location.reload();" class="link">Connect with Wallet</a>&nbsp;|&nbsp;<a href="javascript:history.back()" class="link">&lt;&lt; Back</a>
     </div>
 </div>
-<div style="margin-top:30px" class="row">
-    <div class="col-md-5 offset-3">
-        <form id="send-message" method="post">
-            {% csrf_token %}
-            <div class="form-group regular-text ">
-                <label for="receiver-address">Receiver's Wallet address</label>
-                <input id="receiver" type="text" class="form-control">
-            </div>
-            <div class="regular-text">
-                <label for="message">Message</label>
-            </div>
-            <div>
-               <textarea class="form-control" id="message"></textarea>
-            </div>
-            <div>
-                <!-- Send Paid Message -->
-                <input style="margin-top: 30px" data-price=0 data-name="message" class="btn btn-primary btn-lg btn-block btn-buy" type="submit" value="Send">
-                
-                <!-- Send Free Message -->
-                <input style="margin-top: 30px" class="btn btn-primary btn-lg btn-block btn-success" type="submit" value="Send Free Message">
-            </div>
-            <!-- <label id='output'></label> -->
-        </form>
-        <!-- <div style="margin-top:30px" class="row">
-            <div class="col-md-5 offset-3">
-                <form method="post">
-                    <div class="form-group regular-text ">
-                        <label id='output'></label>
-                    </div>
-                    </form>
+
+
+
+<div class="container message-ui" style="display: none;">
+    <div style="margin-top:30px" class="row">
+        <div class="col-md-5 offset-3">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group regular-text ">
+                    <label for="wallet_address">Your Wallet address is</label>
+                    <input readonly name="wallet_address" type="text" class="form-control" id="wallet_address">
+                    <!-- <input readonly name="solana_wallet_address" type="text" class="form-control" id="solana_wallet_address" > -->
+                    <label id='status'></label>
+                    <!-- <label id='output'></label> -->
                 </div>
-            </div>               -->
+            <center><button id="enablewallet" onclick="window.location.reload();" type="button" class="btn btn-secondary  mb-2">Connect with Wallet</button></center>
+
+            </form>
+        </div>
     </div>
-</div>
+    <div style="margin-top:30px" class="row">
+        <div class="col-md-5 offset-3">
+            <form id="send-message" method="post">
+                {% csrf_token %}
+                <div class="form-group regular-text ">
+                    <label for="receiver-address">Receiver's Wallet address</label>
+                    <input id="receiver" type="text" class="form-control">
+                </div>
+                <div class="regular-text">
+                    <label for="message">Message</label>
+                </div>
+                <div>
+                <textarea class="form-control" id="message"></textarea>
+                </div>
+                <div>
+                    <!-- Send Paid Message -->
+                    <input style="margin-top: 30px" data-price=0 data-name="message" class="btn btn-primary btn-lg btn-block paid-msg" type="submit" value="Send">
+                    
+                    <!-- Send Free Message -->
+                    <input style="margin-top: 30px" class="btn btn-primary btn-lg btn-block btn-success" type="submit" value="Send Free Message">
+                </div>
+                <!-- <label id='output'></label> -->
+            </form>
+            <!-- <div style="margin-top:30px" class="row">
+                <div class="col-md-5 offset-3">
+                    <form method="post">
+                        <div class="form-group regular-text ">
+                            <label id='output'></label>
+                        </div>
+                        </form>
+                    </div>
+                </div>               -->
+        </div>
+    </div>
 </div>
 {% endblock %}

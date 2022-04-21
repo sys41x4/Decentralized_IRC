@@ -721,3 +721,14 @@ a:hover {
   display: inline-block;
   border-radius: 1px solid #000;
 }
+
+/* Status Box styling */
+
+#rcvr-wallet-lst-box, #msg-send-confirm{
+  width: auto;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
