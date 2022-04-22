@@ -132,6 +132,10 @@ function connect() {
 
 
 function get_api_response(err_occur){
+
+    
+
+
     if(err_occur == 1){
         document.getElementById("msg-send-confirm").textContent = 'FAILED';
         document.getElementById("msg-send-confirm").style.color = '#e74c3c';
@@ -142,50 +146,132 @@ function get_api_response(err_occur){
     }
     else if (err_occur == 0){
         message = $('#message').val();
+        // receiver =  $('#receiver').val();
 
         $.ajax({
-            data : JSON.stringify({
-               sender : g_wallet_address,
-               receiver: $('#receiver').val(),
-               message: $('#message').val(),
-                   }),
-               type : 'POST',
-               url : '/api/send_msg',
-               dataType: 'json',
-               contentType: 'application/json',
-               //contentType: 'application/x-www-form-urlencoded',
-               headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
-              })
-          .done(function(data) {
-           $('#output').text(data.output).show();
-    
-           // Show Message Status Success/Failure
-           if (data.error != undefined){
-               console.log(data.error);
-           }
-    
-           document.getElementById("msg-send-confirm").textContent = data.msg_status;
-           document.getElementById("msg-send-confirm").style.color = data.color;
-    
-           setTimeout(function() {
-               document.getElementById("msg-send-confirm").textContent = '';
-           }, 1000);
-           
-    
-           
-           $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-           $('#message').val(null);
-           $('.contact.active .preview').html('<span>You: </span>' + message);
-           $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+        	data : JSON.stringify({
+        	networkID : ethereum.networkVersion,
+            sender_address : ethereum.selectedAddress,
+        	receiver_address : $('#receiver').val(),
+        		}),
+        	type : 'POST',
+        	url : '/api/chk_addr_validity',
+        	dataType: 'json',
+        	contentType: 'application/json',
+		headers: {'sender_address': ethereum.selectedAddress, 'receiver_address':$('#receiver').val(), 'X-CSRFToken':csrf_token}
+        }).done(function(data) {
+        $('#output').text(data.output).show();
+
+        // Show Message Status Success/Failure
+        if (data.error != undefined){
+        	console.log(data.error);
+        }
+        else{
+        	console.log(data.output);
+        }
+        
+
+        if (data.msg_status=='SUCCESS'){
+            // PUSH data to IPFS & WEB2 Storage
+            $.ajax({
+                data : JSON.stringify({
+                   sender : g_wallet_address,
+                   receiver: $('#receiver').val(),
+                   message: $('#message').val(),
+                       }),
+                   type : 'POST',
+                   url : '/api/send_msg',
+                   dataType: 'json',
+                   contentType: 'application/json',
+                   headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
+                  })
+              .done(function(data) {
+                $('#output').text(data.output).show();
+            
+                // Show Message Status Success/Failure
+                if (data.error != undefined){
+                    console.log(data.error);
+                }
+            
+                document.getElementById("msg-send-confirm").textContent = data.msg_status;
+                document.getElementById("msg-send-confirm").style.color = data.color;
+            
+                setTimeout(function() {
+                    document.getElementById("msg-send-confirm").textContent = '';
+                }, 1000);
+                
+            
+                
+                    $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+                    $('#message').val(null);
+                    $('.contact.active .preview').html('<span>You: </span>' + message);
+                    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+                });
+            }
+            else if (data.msg_status=='FAILED'){
+                document.getElementById("msg-send-confirm").textContent = data.msg_status;
+                document.getElementById("msg-send-confirm").style.color = data.color;
+            
+                setTimeout(function() {
+                    document.getElementById("msg-send-confirm").textContent = '';
+                }, 1000);
+            };
+
+        // };
+        
         });
     };
+
+        // PUSH data to database
+    //     $.ajax({
+    //         data : JSON.stringify({
+    //            sender : g_wallet_address,
+    //            receiver: $('#receiver').val(),
+    //            message: $('#message').val(),
+    //                }),
+    //            type : 'POST',
+    //            url : '/api/send_msg',
+    //            dataType: 'json',
+    //            contentType: 'application/json',
+    //            headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
+    //           })
+    //       .done(function(data) {
+    //        $('#output').text(data.output).show();
     
-}
+    //        // Show Message Status Success/Failure
+    //        if (data.error != undefined){
+    //            console.log(data.error);
+    //        }
+    
+    //        document.getElementById("msg-send-confirm").textContent = data.msg_status;
+    //        document.getElementById("msg-send-confirm").style.color = data.color;
+    
+    //        setTimeout(function() {
+    //            document.getElementById("msg-send-confirm").textContent = '';
+    //        }, 1000);
+           
+    
+           
+    //        $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+    //        $('#message').val(null);
+    //        $('.contact.active .preview').html('<span>You: </span>' + message);
+    //        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    //     });
+    // };
+
+    
+};
 
 
 $(document).ready(function() {
 
     $('#send-message').on('submit', function(event) {
+        message = $('#message').val();
+        receiver =  $('#receiver').val();
+         
+        if(($.trim(message) == '') || ($.trim(receiver) == '')){
+            return false;
+        }
 
         $.ajax({
             data : JSON.stringify({
@@ -219,6 +305,12 @@ $(document).ready(function() {
     
     
     $('.free-msg').click(function() {
+        message = $('#message').val();
+        receiver =  $('#receiver').val();
+         
+        if(($.trim(message) == '') || ($.trim(receiver) == '')) {
+            return false;
+        }
         get_api_response(0);
     });
 
@@ -226,8 +318,9 @@ $(document).ready(function() {
 
         // If message == '' then it will not send request to the api
         message = $('#message').val();
-         
-        if($.trim(message) == '') {
+        receiver =  $('#receiver').val();
+
+        if(($.trim(message) == '') || ($.trim(receiver) == ''))  {
             return false;
         }
 
@@ -251,7 +344,7 @@ $(document).ready(function() {
               from: g_wallet_address, // must match user's active address.
               value: eth_wei.toString(16),
               data:utf8ToHex($('#message').val()),
-              chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+              networkID: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
         };
             console.log(transactionParameters)
             
@@ -331,7 +424,7 @@ $(document).ready(function() {
 //             from: g_wallet_address, // must match user's active address.
 //             value: eth_wei.toString(16),
 //             data:utf8ToHex($('#message').val()),
-//             chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+//             networkID: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
 //         };
 //         console.log(transactionParameters)
         
@@ -393,7 +486,7 @@ $( document ).ready(function() {
 //               from: currentAccount, // must match user's active address.
 //               value: eth_wei.toString(16),
 //               data:utf8ToHex(invoice_id),
-//               chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+//               networkID: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
 //             };
 //             console.log(transactionParameters)
 

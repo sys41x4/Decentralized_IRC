@@ -1,2 +1,4 @@
 django
 django-npm
+pyyaml
+web3
