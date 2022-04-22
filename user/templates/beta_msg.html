@@ -211,14 +211,14 @@
 			</ul>
 		</div>
 		<div id="bottom-bar">
-			<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+			<button id="showContactForm" onclick="AddNewContactForm()"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
 			<button id="settings" type="button" class="btn--stroke btn--small ss-modal-trigger"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
 		</div>
 	</div>
 	
 	<div class="content">
 		<div class="contact-profile">
-            <img id="profile-img" src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" />
+            <img id="receiver-img" src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" />
 			<!-- <img src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" /> -->
 			<p>Suraj Disoja</p>
 			<!-- <h1 id='msg-send-confirm' style="text-align: center;"></h1> -->
@@ -226,12 +226,22 @@
                 <!-- <i id="rcvr_wallet" onclick="show_wallet_addr_list()" class='fas fa-wallet'></i> -->
 				<!-- <a class="btn" onclick="pop()">Show Box</a> -->
 				<i id="rcvr-wallet" onclick="wallet_addr_list()" class='fas fa-wallet'></i>
+				<div id="msg-send-confirm"><h1></h1></div>
+
 				<div id="rcvr-wallet-lst-box">
-					<img id="profile-img" src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" />
+					<img id="receiver-wallet-lst-img" src="" alt="" />
 					<a class="rcvr-wallet-lst-close" onclick="wallet_addr_list()">X</a><br>
 			        <h1>Receiver Wallet Address List</h1>
 				</div>
-				<div id="msg-send-confirm"><h1></h1></div>
+
+				<div id="new-contact-detail">
+					<a class="rcvr-wallet-lst-close" onclick="AddNewContactForm()">X</a><br><br>
+					<h1>Add New Contact</h1><br>
+					<p id='newContactValidityStatus'></p><br>
+					<input id="newReceiverAddress" type="text" placeholder="Receiver Wallet Address"><br><br>
+					<button id="addcontact" onclick="newContact()"><span>Add</span></button>
+
+				</div>
 				<!-- <a class="trigger_popup_fricc">Click here to show the popup</a> -->
 
 				<!-- <i class="fa fa-twitter" aria-hidden="true"></i> -->
@@ -284,8 +294,8 @@
 					<input id="receiver" type="text" placeholder="Receiver Wallet Address">
 					<input id="message" type="text" placeholder="Write your message..." />
 					<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-					<button class="submit free-msg"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-					<button data-price=0 data-name="Paid Message" class="submit paid-msg"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+					<button class="free-msg"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+					<button data-price=0 data-name="Paid Message" class="paid-msg"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 					<!-- <button class="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button> -->
                     <!-- <input data-price=0 data-name="message" class="btn submit paid-msg" type="submit" value="Send"> -->
 					
