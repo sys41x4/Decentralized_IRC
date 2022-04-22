@@ -1,9 +1,8 @@
 from ast import In
 from logging import exception
 import os
-from django.dispatch import receiver
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse, HttpResponseServerError, HttpResponseBadRequest
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from api.models import api
@@ -12,8 +11,91 @@ from user.models import user
 import time
 import binascii
 import subprocess
-import json
+import json, yaml
+from web3 import Web3
 import requests
+
+# # Load JSON data from chain_IDs.json file
+# json_chain_ID_file_path = 'chain_IDs.json'
+# chain_ID_data = json.load(open(json_chain_ID_file_path, encoding='utf-8'))
+
+network_ID_data={}
+msg_status = {0:'FAILED', 1:'SUCCESS'}
+color = {0:'#e74c3c', 1:'#2ecc71'}
+
+def gen_chain_list():
+    # Generate Chain_ID data directly from https://chainlist.org/
+    print("Gathering Data from https://chainlist.org/")
+    global network_ID_data
+    chainlist_response = requests.get('https://chainlist.org/')
+    chain_lists = json.loads(chainlist_response.text.split("id=\"__NEXT_DATA__\" type=\"application/json\">")[1].split("</script></body></html>")[0])['props']['pageProps']['sortedChains']
+
+    for basic_chain_detail_index in range(len(chain_lists)):
+        try:
+            network = chain_lists[basic_chain_detail_index]['network']
+            explorers = chain_lists[basic_chain_detail_index]['explorers']
+            rpc = chain_lists[basic_chain_detail_index]['rpc']
+        except KeyError:
+            network = ''
+            explorers = ''
+            rpc=[]
+
+        network_ID_data.update({
+            chain_lists[basic_chain_detail_index]["networkId"]:{
+                "name":chain_lists[basic_chain_detail_index]['name'],
+                "chain":chain_lists[basic_chain_detail_index]['chain'],
+                "rpc":rpc,
+                "network":network,
+                "nativeCurrency":chain_lists[basic_chain_detail_index]['nativeCurrency'],
+                "explorers":explorers,
+                "shortName":chain_lists[basic_chain_detail_index]['shortName'],
+                "chainId":chain_lists[basic_chain_detail_index]['chainId'],
+                "networkId":chain_lists[basic_chain_detail_index]['networkId']
+                }
+            })
+
+# # # Get RPCs List
+# rpcinfo_response = requests.get('https://rpc.info/static/js/main.chunk.js')
+# rpc_lists = json.loads(rpcinfo_response.text.split('const RPCS = [// avax')[1].split('\n\nvar _c;')[0])
+
+@csrf_protect
+def chk_addr_validity(request):
+    # Get RPC Network Details from https://rpc.info/
+    # Using Kovan TestNet for testing
+    # RPC HTTP Link https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
+    # Identify using Chain ID https://chainlist.org/
+    # rpc_http_link_list = {
+    #     "KOVAN":"https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
+    #     }
+    if request.method == "POST":
+        
+        try:
+            global network_ID_data
+            # print(network_ID_data[42])
+            data = json.loads(request.body)
+            # print(request.POST)
+            networkId = int(data['networkID'])
+            sndr_address = data['sender_address']
+            rcvr_address =  data['receiver_address']
+            rpc = network_ID_data[networkId]['rpc'][0]
+            w3 = Web3(Web3.HTTPProvider(rpc))
+            chk_sndr_addr = w3.isAddress(sndr_address)
+            chk_rcvr_addr = w3.isAddress(rcvr_address)
+            output = f"You: {sndr_address} & Receiver: {rcvr_address} validity is checked with\nRPC: {rpc}\n\nChain Detail: {yaml.dump(network_ID_data[networkId])}"
+            # print(chk_addr, output)
+            if ((chk_sndr_addr == True) and (chk_rcvr_addr == True)):
+                return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': f"You: {sndr_address}\nReceiver: {rcvr_address} is valid\n\n{output}"})
+            elif ((chk_sndr_addr == True) or (chk_rcvr_addr == True)):
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': f"You: {sndr_address}\nReceiver: {rcvr_address} is invalid\n\n{output}"})
+
+        except:
+            output = "An ERROR occured"
+            # print(output)
+            return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
+    return JsonResponse({'Response Code':200})
+
+# def verify_UID(chainId):
+#     rpc = chain_ID_data[chainId][rpc][0]
 
 @csrf_protect
 def access_chk(request):
@@ -22,8 +104,7 @@ def access_chk(request):
 @csrf_protect
 #@csrf_exempt
 def send_msg(request):
-    msg_status = 'FAILED'
-    color = '#e74c3c'
+
     # Message = api.objects.all()
     if request.method == "POST":
         try:
@@ -75,31 +156,24 @@ def send_msg(request):
             #     print(f'curl https://{CID}.ipfs.dweb.link/{Txn_Hash}')
             #     # File to get https://<CID>+.ipfs.dweb.link/<Txn-Hash>
 
-            msg_status = 'SUCCESS'
-            color = '#2ecc71'
-            return JsonResponse({'msg_status': msg_status,  'color': color, 'output': output})
+            # # msg_status = 'SUCCESS'
+            # # color = '#2ecc71'
+            return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output})
         except KeyError as err:
-            return JsonResponse({'msg_status': msg_status, 'color': color, 'error' : f"Error : {err} value is not provided"})
+            return JsonResponse({'msg_status': msg_status[0], 'color': color[0], 'error' : f"Error : {err} value is not provided"})
         except BaseException as err:
-            return JsonResponse({'msg_status': msg_status,  'color': color, 'error' : f"Error : {err=}"})
-    # context = {
-    #     'message': Message
-    # }
-    
-    #return render(request, 'message_index.html', context)
+            return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'error' : f"Error : {err=}"})
+
     return JsonResponse({'Response Code':200})
 @csrf_protect
-
+#@csrf_exempt
 def set_wallet_session(request):
+
     if request.method == 'POST':
         data = json.loads(request.body)
         wallet_address = data['wallet_address']
-    #session['wallet_address'] = wallet_address
-    # context = {
-    #     'message': Message
-    # }
-<<<<<<< HEAD
-    return JsonResponse({'request':200})
+
+    return JsonResponse({'Response Code':200})
 
 # Fetch messages from etherium explorer and return JSON.
 @csrf_exempt
@@ -134,6 +208,6 @@ def getMessages(request):
             return HttpResponseBadRequest()
     except:
         return HttpResponseServerError("Something Went Wrong")
-=======
     return JsonResponse({'Response Code':200})
->>>>>>> b28c0bbe4a3be3e0e8de879895362a0555651daf
+  
+gen_chain_list()
