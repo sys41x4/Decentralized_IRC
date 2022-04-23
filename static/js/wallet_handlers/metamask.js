@@ -202,7 +202,7 @@ function get_api_response(err_occur){
                 
             
                 
-                    $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+                    $('<li class="sent"><img src="'+$("#profile-img")[0]['src']+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
                     $('#message').val(null);
                     $('.contact.active .preview').html('<span>You: </span>' + message);
                     $(".messages").animate({ scrollTop: $(document).height() }, "fast");
@@ -214,50 +214,14 @@ function get_api_response(err_occur){
             
                 setTimeout(function() {
                     document.getElementById("msg-send-confirm").textContent = '';
+                    $('#message').val(null);
                 }, 1000);
+                
             };
-
-        // };
         
         });
     };
 
-        // PUSH data to database
-    //     $.ajax({
-    //         data : JSON.stringify({
-    //            sender : g_wallet_address,
-    //            receiver: $('#receiver').val(),
-    //            message: $('#message').val(),
-    //                }),
-    //            type : 'POST',
-    //            url : '/api/send_msg',
-    //            dataType: 'json',
-    //            contentType: 'application/json',
-    //            headers: {'Wallet_Address':g_wallet_address, 'Receiver':$('#receiver').val(),'X-CSRFToken':csrf_token}
-    //           })
-    //       .done(function(data) {
-    //        $('#output').text(data.output).show();
-    
-    //        // Show Message Status Success/Failure
-    //        if (data.error != undefined){
-    //            console.log(data.error);
-    //        }
-    
-    //        document.getElementById("msg-send-confirm").textContent = data.msg_status;
-    //        document.getElementById("msg-send-confirm").style.color = data.color;
-    
-    //        setTimeout(function() {
-    //            document.getElementById("msg-send-confirm").textContent = '';
-    //        }, 1000);
-           
-    
-           
-    //        $('<li class="sent"><img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-    //        $('#message').val(null);
-    //        $('.contact.active .preview').html('<span>You: </span>' + message);
-    //        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-    //     });
-    // };
 
     
 };
