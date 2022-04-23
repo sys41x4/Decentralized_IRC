@@ -94,8 +94,91 @@ def chk_addr_validity(request):
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
     return JsonResponse({'Response Code':200})
 
-# def verify_UID(chainId):
-#     rpc = chain_ID_data[chainId][rpc][0]
+def fetch_paid_txn(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            txn_hash = data['txn_hash']
+            networkId = int(data['networkID'])
+            rpc = network_ID_data[networkId]['rpc'][0]
+            w3 = Web3(Web3.HTTPProvider(rpc))
+            txn_data = w3.eth.get_transaction(txn_hash)
+            data = bytes.fromhex(txn_data['input'][2:]).decode('utf-8')
+
+        except:
+            output = "An ERROR occured"
+            # print(output)
+            return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
+    return JsonResponse({'Response Code':200})
+
+def fetch_messages(request):
+    if request.method == "POST":
+        try:
+            # Considering that we have fetched correct data from database server
+            # First the fetcher data will be fetched according to nonce value to a particular receiver
+            # Then the receivers data similarly
+            # About the conversation between
+            # 0xd17d369fffcd92e713cf482e6eceda693bf7c8b9 & 0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9
+            # Only the Upper two addresses are considered for now
+            # for testing purpose.
+            # Where both are sender and reveiver
+            # last 10 messages will be fetched to reduce unnecessary workload in the application
+
+            data = json.loads(request.body)
+            fetcher = data['fetcher']
+            receiver = data['receiver']
+
+            # # Test Communication Data
+
+            communicators = {'fetcher':fetcher, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9'}
+            if receiver!=communicators['receiver']:
+                output = f"Messages Fetched Successfully\nTotal 0 Messages fetched between {fetcher} & {receiver}"
+
+                return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output, 'message_data':[]})
+            # communication_data = {
+
+            #     '0xd17d369fffcd92e713cf482e6eceda693bf7c8b9': {
+            #     1650707120.936152: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':0, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hello Man Whats Up', 'timestamp':1650707120.936152},
+            #     1650707282.4517663: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':1, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'What\'s going on ?', 'timestamp':1650707282.4517663},
+            #     1650707328.6830337: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':2, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'I am just watching a movie...', 'timestamp':1650707328.6830337},
+            #     1650707338.0125976: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':3, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hey Man Are You Still there ?', 'timestamp':1650707338.0125976},
+            #     1650707348.8427203: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':4, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Mannn.. Again you are offline ... -_- ', 'timestamp':1650707348.8427203}
+            #     },
+
+            #     '0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9': {
+            #     1650707156.6189778: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':0, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'I am good what\'s you doing ? ', 'timestamp':1650707156.6189778},
+            #     1650707290.8573165: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':1, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'Nothing much, Just chilling with laptop', 'timestamp':1650707290.8573165},
+
+            #     }
+            # }
+            communication_data = {
+                1650707120.936152: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':0, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
+                1650707282.4517663: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':1, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
+                1650707328.6830337: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':2, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
+                1650707338.0125976: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':3, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
+                1650707348.8427203: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':4, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
+                1650707156.6189778: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':0, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
+                1650707290.8573165: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':1, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
+            }
+
+            total_msg_count = len(communication_data.keys())
+            ordered_message_data = []
+
+            for timestamp in sorted(communication_data.keys()):
+                ordered_message_data+=[communication_data[timestamp]]
+
+            output = f"Messages Fetched Successfully\nTotal {total_msg_count} Messages fetched between {fetcher} & {receiver}"
+
+            return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output, 'message_data':ordered_message_data})
+
+
+
+        except:
+                output = "An ERROR occured\nMessages are not fetched Successfully"
+                # print(output)
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
+    return JsonResponse({'Response Code':200})
+        
 
 @csrf_protect
 def access_chk(request):
