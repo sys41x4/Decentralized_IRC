@@ -258,4 +258,39 @@ def set_wallet_session(request):
 
     return JsonResponse({'Response Code':200})
 
+# Fetch messages from etherium explorer and return JSON.
+@csrf_exempt
+def getMessages(request):
+    try:
+        if request.method == 'POST' and request.content_type == 'application/json':
+            data = json.loads(request.body)
+            wallet_address = data['wallet_address']
+            transactions = requests.get(f'https://api-kovan.etherscan.io/api?module=account&action=txlist&address={wallet_address}&startblock=0&endblock=99999999&sort=asc&apikey=V9EAM35F8F1RGRD3EPJAQQ4N97K9M37GMV',headers={"User-Agent":"IRC-DEV"})
+            transactions_json = transactions.json()
+            transactions_json_len = len(transactions_json['result'])
+            transactions_dict ={"sent":{},"received":{}}
+            for i in range(0,transactions_json_len):
+                sender_address = transactions_json['result'][i]['from']
+                receiver_address = transactions_json['result'][i]['to']
+                message_hex = transactions_json['result'][i]['input']
+                if sender_address == wallet_address:
+                    if receiver_address not in transactions_dict['sent']:
+                        transactions_dict['sent'][receiver_address] = []
+                        transactions_dict['sent'][receiver_address].append(message_hex)
+                    else:
+                        transactions_dict['sent'][receiver_address].append(message_hex)
+                elif receiver_address == wallet_address:
+                    if sender_address not in transactions_dict['received']:
+                        transactions_dict['received'][sender_address] = []
+                        transactions_dict['received'][sender_address].append(message_hex)
+                    else:
+                        transactions_dict['sent'][sender_address].append(message_hex)
+            response_json = {"result":transactions_dict}
+            return JsonResponse(response_json)
+        else:
+            return HttpResponseBadRequest()
+    except:
+        return HttpResponseServerError("Something Went Wrong")
+    return JsonResponse({'Response Code':200})
+  
 gen_chain_list()

@@ -421,3 +421,46 @@ var modal = null
      modal = null
    }
  }
+
+ function constructcontactsUI(data){
+	contacts_div = document.getElementById('contacts_holder') 
+	Object.keys(data.result.sent).forEach(function(address){
+		contacts_div.innerHTML = contacts_div.innerHTML + '<li class="contact" id='+address+' onclick=changeactive("'+address+'")><div class="wrap"><span class="contact-status online"></span><img src="http://emilcarlsson.se/assets/louislitt.png" alt="" /><div class="meta"><p class="name">'+address+'</p></div></div></li>'
+	 });
+	Object.keys(data.result.received).forEach(function(address){
+		contacts_div.innerHTML = contacts_div.innerHTML + '<li class="contact" id='+address+' onclick=changeactive("'+address+'")><div class="wrap"><span class="contact-status online"></span><img src="http://emilcarlsson.se/assets/louislitt.png" alt="" /><div class="meta"><p class="name">'+address+'</p></div></div></li>'
+	 }) 
+ }
+
+function changeactive(address){
+	if (document.getElementsByClassName('contact active')[0] != null){
+	document.getElementsByClassName('contact active')[0].className = 'contact';
+	document.getElementById(address).className = 'contact active';
+	}
+	else{
+		document.getElementById(address).className = 'contact active';
+	}
+}
+ function getmessages(download=false){
+    url = "/api/getMessages"
+    fetch(url,{
+        method:"POST",
+        headers:{"Content-type":"application/json"},
+        body:JSON.stringify({"wallet_address":g_wallet_address})
+    })
+    .then(response => {return response.json()})
+    .then(data => {
+        if (download==true){
+			data = JSON.stringify(data);
+            var blob = new Blob([content], {
+                type: "text/plain;charset=utf-8"
+               });
+            saveAs(blob,'messages.txt')
+        }
+        else{
+        console.log(data);
+		constructcontactsUI(data);
+	}
+    })
+}
+
