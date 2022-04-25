@@ -769,3 +769,26 @@ a:hover {
   font-size: 0.85em;
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
 }
+
+/* Startup Logo Styles */
+
+.startup-logo{
+  width: auto;
+  overflow: hidden;
+  /* background: #1e2020; */
+  border: none;
+  /* box-shadow: 0 0 50px black; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  line-height: 20px;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  padding: 6px 6px;
+  text-align: center;
+  /* display: none; */
+}
+
+#startup-logo{
+  width: 70%;
+}

@@ -119,93 +119,34 @@
 						</div>
 					</div>
 				</li>
-				<li class="contact active">
+				<li onclick="view_conversation($(this).attr('address-receiver'))" address-receiver="asdasd" class="contact asdasd active">
 					<div class="wrap">
 						<span class="contact-status busy"></span>
-						<img src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" />
+						<img src="https://i.postimg.cc/cHRb0Xzj/user25.png" alt="" />
 						<div class="meta">
 							<p class="name">Suraj Disoja</p>
 							<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
 						</div>
 					</div>
 				</li>
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status away"></span>
-						<img src="http://emilcarlsson.se/assets/rachelzane.png" alt="" />
-						<div class="meta">
-							<p class="name">Rachel Zane</p>
-							<p class="preview">I was thinking that we could have chicken tonight, sounds good?</p>
-						</div>
-					</div>
-				</li>
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status online"></span>
-						<img src="http://emilcarlsson.se/assets/donnapaulsen.png" alt="" />
-						<div class="meta">
-							<p class="name">Donna Paulsen</p>
-							<p class="preview">Mike, I know everything! I'm Donna..</p>
-						</div>
-					</div>
-				</li>
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status busy"></span>
-						<img src="http://emilcarlsson.se/assets/jessicapearson.png" alt="" />
-						<div class="meta">
-							<p class="name">Jessica Pearson</p>
-							<p class="preview">Have you finished the draft on the Hinsenburg deal?</p>
-						</div>
-					</div>
-				</li>
-				<li class="contact">
+				
+				<!-- <li data-RcvrAddr="0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9" class="contact 0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9">
 					<div class="wrap">
 						<span class="contact-status"></span>
-						<img src="http://emilcarlsson.se/assets/haroldgunderson.png" alt="" />
+						<img src="https://i.postimg.cc/TPr9Dhc5/user29.png" alt="">
 						<div class="meta">
-							<p class="name">Harold Gunderson</p>
-							<p class="preview">Thanks Mike! :)</p>
+							<p class="name">Arijit 0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9</p>
+							<p class="preview"><span>You:</span> Added Contact</p>
 						</div>
 					</div>
-				</li>
-				<li class="contact">
+				</li> -->
+				<li onclick="view_conversation($(this).attr('address-receiver'))" address-receiver="0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9" class="contact 0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9">
 					<div class="wrap">
 						<span class="contact-status"></span>
-						<img src="http://emilcarlsson.se/assets/danielhardman.png" alt="" />
+						<img src="https://i.postimg.cc/N09hq8Bq/user13.png" alt="">
 						<div class="meta">
-							<p class="name">Daniel Hardman</p>
-							<p class="preview">We'll meet again, Mike. Tell Jessica I said 'Hi'.</p>
-						</div>
-					</div>
-				</li>
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status busy"></span>
-						<img src="http://emilcarlsson.se/assets/katrinabennett.png" alt="" />
-						<div class="meta">
-							<p class="name">Katrina Bennett</p>
-							<p class="preview">I've sent you the files for the Garrett trial.</p>
-						</div>
-					</div>
-				</li>
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status"></span>
-						<img src="http://emilcarlsson.se/assets/charlesforstman.png" alt="" />
-						<div class="meta">
-							<p class="name">Charles Forstman</p>
-							<p class="preview">Mike, this isn't over.</p>
-						</div>
-					</div>
-				</li>
-				<li class="contact">
-					<div class="wrap">
-						<span class="contact-status"></span>
-						<img src="http://emilcarlsson.se/assets/jonathansidwell.png" alt="" />
-						<div class="meta">
-							<p class="name">Jonathan Sidwell</p>
-							<p class="preview"><span>You:</span> That's bullshit. This deal is solid.</p>
+							<p class="name">Arijit 0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9</p>
+							<p class="preview"><span>You:</span> Added Contact</p>
 						</div>
 					</div>
 				</li>-->
@@ -216,25 +157,27 @@
 			<button id="settings" type="button" class="btn--stroke btn--small ss-modal-trigger"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
 		</div>
 	</div>
-	
+
 	<div class="content">
 		<div class="contact-profile">
             <img id="receiver-img" src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" />
 			<!-- <img src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" /> -->
-			<p>Suraj Disoja</p>
+			<p id="rcvr_name">Suraj Disoja</p>
 			<!-- <h1 id='msg-send-confirm' style="text-align: center;"></h1> -->
 			<div class="social-media">
                 <!-- <i id="rcvr_wallet" onclick="show_wallet_addr_list()" class='fas fa-wallet'></i> -->
 				<!-- <a class="btn" onclick="pop()">Show Box</a> -->
 				<i id="rcvr-wallet" onclick="wallet_addr_list()" class='fas fa-wallet'></i>
+
 				<div id="msg-send-confirm"><h1></h1></div>
 
 				<div id="rcvr-wallet-lst-box">
 					<img id="receiver-wallet-lst-img" src="" alt="" />
 					<a class="rcvr-wallet-lst-close" onclick="wallet_addr_list()">X</a><br>
 			        <h1>Receiver Wallet Address List</h1>
+					<p>asd</p>
 				</div>
-
+				
 				<div id="new-contact-detail">
 					<a class="rcvr-wallet-lst-close" onclick="AddNewContactForm()">X</a><br><br>
 					<h1>Add New Contact</h1><br>
@@ -243,6 +186,11 @@
 					<button id="addcontact" onclick="newContact()"><span>Add</span></button>
 
 				</div>
+				<div class="startup-logo">
+					<img style="width: 70%; border-radius: 0; margin:0; float:none" id="startup-logo" src="https://avatars.githubusercontent.com/u/66935336?v=4" alt="" />
+
+				</div>
+
 				<!-- <a class="trigger_popup_fricc">Click here to show the popup</a> -->
 
 				<!-- <i class="fa fa-twitter" aria-hidden="true"></i> -->
@@ -292,7 +240,7 @@
 				<form  id="send-message"  method="post">
 					{% csrf_token %}
 				<div class="wrap">
-					<input id="receiver" type="text" placeholder="Receiver Wallet Address">
+					<input id="receiver" type="hidden" value="" placeholder="Receiver Wallet Address">
 					<input id="message" type="text" placeholder="Write your message..." />
 					<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
 					<button class="free-msg"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
