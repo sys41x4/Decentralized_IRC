@@ -2,7 +2,7 @@ from ast import In
 from logging import exception
 import os
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from api.models import api
@@ -118,7 +118,7 @@ def fetch_messages(request):
             # First the fetcher data will be fetched according to nonce value to a particular receiver
             # Then the receivers data similarly
             # About the conversation between
-            # 0xd17d369fffcd92e713cf482e6eceda693bf7c8b9 & 0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9
+            # 0x68237960f18f2b3a1555a39cd3427c52b98ad10b & 0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b
             # Only the Upper two addresses are considered for now
             # for testing purpose.
             # Where both are sender and reveiver
@@ -130,35 +130,35 @@ def fetch_messages(request):
 
             # # Test Communication Data
 
-            communicators = {'fetcher':fetcher, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9'}
+            communicators = {'fetcher':fetcher, 'receiver':receiver}
             if receiver!=communicators['receiver']:
                 output = f"Messages Fetched Successfully\nTotal 0 Messages fetched between {fetcher} & {receiver}"
 
                 return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output, 'message_data':[]})
             # communication_data = {
 
-            #     '0xd17d369fffcd92e713cf482e6eceda693bf7c8b9': {
-            #     1650707120.936152: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':0, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hello Man Whats Up', 'timestamp':1650707120.936152},
-            #     1650707282.4517663: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':1, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'What\'s going on ?', 'timestamp':1650707282.4517663},
-            #     1650707328.6830337: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':2, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'I am just watching a movie...', 'timestamp':1650707328.6830337},
-            #     1650707338.0125976: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':3, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hey Man Are You Still there ?', 'timestamp':1650707338.0125976},
-            #     1650707348.8427203: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':4, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Mannn.. Again you are offline ... -_- ', 'timestamp':1650707348.8427203}
+            #     '0x68237960f18f2b3a1555a39cd3427c52b98ad10b': {
+            #     1650707120.936152: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':0, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'Hello Man Whats Up', 'timestamp':1650707120.936152},
+            #     1650707282.4517663: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':1, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'What\'s going on ?', 'timestamp':1650707282.4517663},
+            #     1650707328.6830337: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':2, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'I am just watching a movie...', 'timestamp':1650707328.6830337},
+            #     1650707338.0125976: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':3, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'Hey Man Are You Still there ?', 'timestamp':1650707338.0125976},
+            #     1650707348.8427203: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':4, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'Mannn.. Again you are offline ... -_- ', 'timestamp':1650707348.8427203}
             #     },
 
-            #     '0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9': {
-            #     1650707156.6189778: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':0, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'I am good what\'s you doing ? ', 'timestamp':1650707156.6189778},
-            #     1650707290.8573165: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':1, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'Nothing much, Just chilling with laptop', 'timestamp':1650707290.8573165},
+            #     '0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b': {
+            #     1650707156.6189778: {'sender':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'nonce':0, 'receiver':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'message':'I am good what\'s you doing ? ', 'timestamp':1650707156.6189778},
+            #     1650707290.8573165: {'sender':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'nonce':1, 'receiver':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'message':'Nothing much, Just chilling with laptop', 'timestamp':1650707290.8573165},
 
             #     }
             # }
             communication_data = {
-                1650707120.936152: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':0, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
-                1650707282.4517663: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':1, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
-                1650707328.6830337: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':2, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
-                1650707338.0125976: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':3, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
-                1650707348.8427203: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':4, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
-                1650707156.6189778: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':0, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
-                1650707290.8573165: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':1, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
+                1650707120.936152: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':0, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
+                1650707282.4517663: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':1, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
+                1650707328.6830337: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':2, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
+                1650707338.0125976: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':3, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
+                1650707348.8427203: {'sender':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'nonce':4, 'receiver':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
+                1650707156.6189778: {'sender':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'nonce':0, 'receiver':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
+                1650707290.8573165: {'sender':'0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b', 'nonce':1, 'receiver':'0x68237960f18f2b3a1555a39cd3427c52b98ad10b', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
             }
 
             total_msg_count = len(communication_data.keys())
@@ -169,9 +169,7 @@ def fetch_messages(request):
 
             output = f"Messages Fetched Successfully\nTotal {total_msg_count} Messages fetched between {fetcher} & {receiver}"
 
-            return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output, 'message_data':ordered_message_data})
-
-
+            return JsonResponse({'msg_status': msg_status[1], 'chatroom_id': 'test','color': color[1], 'output': output, 'message_data':ordered_message_data})
 
         except:
                 output = "An ERROR occured\nMessages are not fetched Successfully"
@@ -248,6 +246,15 @@ def send_msg(request):
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'error' : f"Error : {err=}"})
 
     return JsonResponse({'Response Code':200})
+
+@csrf_protect
+def chat_ids(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user = data['user']
+        res = {"chats":{"test":['0x68237960f18f2b3a1555a39cd3427c52b98ad10b','0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b']}}
+        return JsonResponse(res)
+
 @csrf_protect
 #@csrf_exempt
 def set_wallet_session(request):
