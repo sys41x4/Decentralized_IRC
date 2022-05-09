@@ -40,18 +40,6 @@ function set_wallet_address(wallet_address) {
     body:JSON.stringify({"wallet_address":wallet_address, 'X-CSRFToken':csrf_token})})
 }
 
-<<<<<<< HEAD:static/js/app.js
-function addOrder(wallet_address,tx,name,invoice_id) {
-    $.post("/api/add_order",
-                        { wallet_address: wallet_address, tx: tx,name:name,invoice_id:invoice_id },
-                         function(data, status){
-                                if(data == 'OK') {
-                                    alert('Order placed successfully')
-                                } else {
-                                    alert('Order could not place successfully')
-                                }
-    });
-=======
 // function addOrder(wallet_address,tx,name,invoice_id) {
 //     $.post("/api/add_order",
 //                         { wallet_address: wallet_address, tx: tx,name:name,invoice_id:invoice_id },
@@ -105,7 +93,6 @@ window.onload = () => {
         console.log('Please connect to Phantom.');
     });
 
->>>>>>> b28c0bbe4a3be3e0e8de879895362a0555651daf:static/js/wallet_handlers/phantom_testnet.js
 }
 
 // devnet Testing

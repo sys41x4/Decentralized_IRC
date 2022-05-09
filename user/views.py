@@ -5,7 +5,8 @@ def homepage(request):
     return render(request, 'homepage.html')
 
 def beta_message(request):
-    return render(request, 'beta_msg.html')
+    receiver = request.GET['r']
+    return render(request, 'beta_msg.html',{'recv':receiver})
 
 def user_dashboard(request):
     # Message = user.objects.all()
