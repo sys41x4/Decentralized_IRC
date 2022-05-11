@@ -203,8 +203,8 @@ function get_api_response(err_occur){
                 //Commenting it out to avoid double message display
                    // $('<li class="sent"><img src="'+$("#profile-img")[0]['src']+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
                     $('#message').val(null);
-                    $('.contact.active .preview').html('<span>You: </span>' + message);
-                    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+                    // $('.contact.active .preview').html('<span>You: </span>' + message);
+                    // $(".messages").animate({ scrollTop: $(document).height() }, "fast");
                 });
             }
             else if (data.msg_status=='FAILED'){
