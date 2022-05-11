@@ -106,7 +106,7 @@
     --color-2-dark                 : hsla(344, 44%, 15%, 1);
     --color-2-darker               : hsla(344, 44%, 5%, 1);
     --color-3-lighter              : hsla(40, 100%, 97%, 1);
-    --color-3-light                : hsla(40, 100%, 85%, 1);
+    --color-3-light                : rgb(226, 226, 226);
     --color-3-dark                 : hsla(40, 100%, 65%, 1);
     --color-3-darker               : hsla(40, 100%, 55%, 1);
 
@@ -4102,3 +4102,27 @@ img.u-pull-left {
         line-height : var(--vspace-0_5);
     }
 }
+
+/* ScrollBar styling */
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #00000026 #0000;
+    }
+    
+    /* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #0000;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #00000026;
+    border-radius: 20px;
+    border: 3px solid #0000;
+}
+    
+/* ScrollBar Styling Ends Here */

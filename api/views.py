@@ -1,4 +1,5 @@
 from ast import In
+from ctypes import addressof
 from logging import exception
 import os
 from django.shortcuts import render
@@ -9,26 +10,30 @@ from api.models import api
 from user.models import user
 
 import time
+import uuid
 import binascii
 import subprocess
 import json, yaml
 from web3 import Web3
 import requests
 
-# # Load JSON data from chain_IDs.json file
-# json_chain_ID_file_path = 'chain_IDs.json'
-# chain_ID_data = json.load(open(json_chain_ID_file_path, encoding='utf-8'))
+
 
 network_ID_data={}
 msg_status = {0:'FAILED', 1:'SUCCESS'}
 color = {0:'#e74c3c', 1:'#2ecc71'}
 
 def gen_chain_list():
-    # Generate Chain_ID data directly from https://chainlist.org/
-    print("Gathering Data from https://chainlist.org/")
     global network_ID_data
-    chainlist_response = requests.get('https://chainlist.org/')
-    chain_lists = json.loads(chainlist_response.text.split("id=\"__NEXT_DATA__\" type=\"application/json\">")[1].split("</script></body></html>")[0])['props']['pageProps']['sortedChains']
+    # # Generate Chain_ID data directly from https://chainlist.org/
+    # print("Gathering Data from https://chainlist.org/")
+    # chainlist_response = requests.get('https://chainlist.org/')
+    # chain_lists = json.loads(chainlist_response.text.split("id=\"__NEXT_DATA__\" type=\"application/json\">")[1].split("</script></body></html>")[0])['props']['pageProps']['sortedChains']
+
+    # # Load JSON data from chain_IDs.json file
+    print("Gathering Data from https://chainlist.org/ generated json File")
+    json_chain_ID_file_path = 'chain_ID_list.json'
+    chain_lists = json.load(open(json_chain_ID_file_path, encoding='utf-8'))['props']['pageProps']['sortedChains']
 
     for basic_chain_detail_index in range(len(chain_lists)):
         try:
@@ -81,7 +86,7 @@ def chk_addr_validity(request):
             w3 = Web3(Web3.HTTPProvider(rpc))
             chk_sndr_addr = w3.isAddress(sndr_address)
             chk_rcvr_addr = w3.isAddress(rcvr_address)
-            output = f"You: {sndr_address} & Receiver: {rcvr_address} validity is checked with\nRPC: {rpc}\n\nChain Detail: {yaml.dump(network_ID_data[networkId])}"
+            output = f"You: {sndr_address} & Receiver: {rcvr_address} validity is checked with\nRPC: {rpc}\n\nChain Detail: \n{yaml.dump(network_ID_data[networkId])}"
             # print(chk_addr, output)
             if ((chk_sndr_addr == True) and (chk_rcvr_addr == True)):
                 return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': f"You: {sndr_address}\nReceiver: {rcvr_address} is valid\n\n{output}"})
@@ -93,6 +98,420 @@ def chk_addr_validity(request):
             # print(output)
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
     return JsonResponse({'Response Code':200})
+
+
+# def fetch_CurrentUser_walletAddresses(uuid, wallet_addr):
+uuid_linked_walletAddr={
+    '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9':'863dc52a-c39c-11ec-8b20-82304926de9b',
+    '0X283C3B6A4D84D457F1B6BB8FB947CFA432EFC293':'863dc52a-c39c-11ec-8b20-82304926de9b',
+    '0XFFE39E1461D0361C3D72658EF39AE76288C82622':'a149137f-c39b-11ec-81f4-82304926de9b',
+    '0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9':'a149137f-c39b-11ec-81f4-82304926de9b',
+    '0X68237960F18F2B3A1555A39CD3427C52B98AD10B':'6905735c-c511-11ec-a9f3-82304926de9b',
+    '0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B':'5fa6aee8-cf80-11ec-9735-82304926de9b',
+
+}
+
+
+basic_user_detail = {
+    '863dc52a-c39c-11ec-8b20-82304926de9b': {
+        'name':'Arijit Bhowmick',
+        'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+        'connected_wallets':[
+            {
+                'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                'networkId':42,
+            },
+
+            {
+                'wallet_address':'0X283C3B6A4D84D457F1B6BB8FB947CFA432EFC293',
+                'networkId':42,
+            },
+        ]
+
+    },
+
+    'a149137f-c39b-11ec-81f4-82304926de9b': {
+        'name':'sys41x4',
+        'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+        'connected_wallets':[
+            {
+                'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+                'networkId':42,
+            },
+
+            {
+                'wallet_address':'0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9',
+                'networkId':42,
+            },
+        ]
+    },
+
+    '6905735c-c511-11ec-a9f3-82304926de9b': {
+        'name':'Suraj Disoja',
+        'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+        'connected_wallets':[
+            {
+                'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+                'networkId':42,
+            }
+        ]
+    },
+
+    '5fa6aee8-cf80-11ec-9735-82304926de9b' : {
+        'name':'ninetyn1ne',
+        'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+        'connected_wallets':[
+            {
+                'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+                'networkId':42,
+            }
+        ]
+    },
+
+    'uNveRiF1eD_d4TA':{
+        'name':'',
+        'primary_wallet_address':'',
+        'connected_wallets':[
+            {
+                'wallet_address':'',
+                'networkId':'',
+            }
+        ]
+    }
+}
+
+contact_details = {
+    '863dc52a-c39c-11ec-8b20-82304926de9b': {
+        'totalContacts':3,
+        'contactsList':{
+            0:{
+                'name': 'sys41x4',
+                'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+                'walletList':[
+                    {
+                        'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+                        'networkId':42,
+                    },
+
+                    {
+                        'wallet_address':'0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9',
+                        'networkId':42,
+                    }
+                    
+                ]
+            },
+
+            1:{
+                'name': 'Suraj Disoja',
+                'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+                'walletList':[
+                    {
+                        'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+                        'networkId':42,
+                    }
+
+                ]
+            },
+
+            2:{
+                'name': 'ninetyn1ne',
+                'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+                'walletList':[
+                    {
+                        'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+                        'networkId':42,
+                    }
+
+                ]
+            }
+        },
+    },
+
+    'a149137f-c39b-11ec-81f4-82304926de9b': {
+        'totalContacts':1,
+        'contactsList':{
+            0:{
+                'name': 'Arijit Bhowmick',
+                'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                'walletList':[
+                    {
+                        'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                        'networkId':42,
+                    }
+                ]
+            }
+        },
+    },
+        
+    '6905735c-c511-11ec-a9f3-82304926de9b': {
+        'totalContacts':3,
+        'contactsList':{
+            0:{
+                'name': 'Arijit Bhowmick',
+                'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                'walletList':[
+                    {
+                        'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                        'networkId':42,
+                    }
+                ]
+            },
+
+            1:{
+                'name': 'sys41x4',
+                'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+                'walletList':[
+                    {
+                        'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+                        'networkId':42,
+                    }
+                ]
+            },
+
+            2:{
+                'name': 'ninetyn1ne',
+                'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+                'walletList':[
+                    {
+                        'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+                        'networkId':42,
+                    }
+                ]
+            }
+        },
+
+    },
+
+    '5fa6aee8-cf80-11ec-9735-82304926de9b': {
+        'totalContacts':2,
+        'contactsList':{
+            0:{
+                'name': 'Arijit Bhowmick',
+                'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                'walletList':[
+                    {
+                        'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                        'networkId':42,
+                    }
+                ]
+            },
+
+            1:{
+                'name': 'Suraj Disoja',
+                'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+                'walletList':[
+                    {
+                        'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+                        'networkId':42,
+                    }
+
+                ]
+            }
+        },
+
+    },
+
+    'UNv3RifiEd_DA74': {
+        'totalContacts':0,
+        'contactsList':{},
+
+    },
+}
+
+
+communication_data = {
+
+    '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9-0XFFE39E1461D0361C3D72658EF39AE76288C82622':{
+        1650707120.936152: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':0, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
+        1650707282.4517663: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':1, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
+        1650707328.6830337: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':2, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
+        1650707338.0125976: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':3, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
+        1650707348.8427203: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':4, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
+        1650707156.6189778: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':0, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
+        1650707290.8573165: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':1, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
+    },
+    
+    
+}
+
+def fetch_uuid(request):
+    if request.method == "POST":
+        try:
+
+            data = json.loads(request.body)
+            
+            try:
+                uuid = uuid_linked_walletAddr[data['current_WalletAddress']]
+                return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': 'Account Data Found', 'uuid':uuid})
+            except:
+                # return ('UUID Not Verified', basic_user_detail['uNveRiF1eD_d4TA'])
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': 'Verification Failed', 'uuid':'n0T v3RIfiEd'})
+
+        except:
+            output = "An ERROR occured\nAccount Verification Failed"
+            # print(output)
+            return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
+    return JsonResponse({'Response Code':200})
+
+
+def fetch_startup_data(request):
+    if request.method == "POST":
+        try:
+            # Parameters
+            # # Fetcher:
+            # ('self', 'current_WalletAddress')
+            # 
+
+
+            data = json.loads(request.body)
+            # addressesOf = data['addressesOf']
+            # uuid = data['uuid']
+            wallet_addr = data['current_WalletAddress']
+
+            try:
+                uuid = uuid_linked_walletAddr[wallet_addr]
+            except:
+                # return ('UUID Not Verified', basic_user_detail['uNveRiF1eD_d4TA'])
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': 'UUID Not Verified', 'basic_UserData':basic_user_detail['uNveRiF1eD_d4TA']})
+
+            
+
+            # if addressesOf=='self':
+
+            counter=0
+            if (uuid in basic_user_detail):
+                for i in basic_user_detail[uuid]['connected_wallets']:
+                    if wallet_addr == i['wallet_address']:
+                        counter+=1
+    
+                if (counter<1 or counter>1):return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': 'Wallet Address Not Verified', 'basic_UserData':basic_user_detail['uNveRiF1eD_d4TA']})
+                    # return ('Wallet Address Not Verified', basic_user_detail['uNveRiF1eD_d4TA'])
+
+                # return (uuid, basic_user_detail[uuid])
+                return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': 'Successfully Fetched, Basic User Data', 'basic_UserData':[uuid, basic_user_detail[uuid]]})
+
+            else:
+                # return ('UUID Not Verified', basic_user_detail['uNveRiF1eD_d4TA'])
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': 'UUID Not Verified', 'basic_UserData':basic_user_detail['uNveRiF1eD_d4TA']})
+                
+            # elif addressesOf=='contact':
+            #     contact_id = data['contact_id']
+            #     active_rcvr_wltAddr = data['active_receiver_WalletAddress']
+                
+        except:
+            output = "An ERROR occured\nStartup Data not fetched Successfully"
+            # print(output)
+            return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
+    return JsonResponse({'Response Code':200})
+
+
+def fetch_contacts(request):
+    if request.method == "POST":
+        try:
+            # Parameters
+            # # Fetcher:
+            # ('uuid', 'current_WalletAddress')
+            # 
+            data = json.loads(request.body)
+            uuid = data['uuid']
+            walt_addr= data['current_WalletAddress']
+            # Assuming that we have implemented a function
+            # where user can add multiple wallet address of his/her own
+            # so there must be a identifier for that user whose wallet_addresses
+            # will be collected as a list
+            # 
+            # Here comes the uid, where a random uid will be assigned to a user at first run
+            # when he/she will trigger any request that lead to access to database
+            # 
+            # At that point the user will be assigned with a uid
+            # after it is checked if the uid is allocated by other used or not
+            # from the uid table data fetched from database
+            # and the user's current wallet address will be added to the list of wallet_addresses
+            # that the uid refer to.
+            # 
+            # Further details will be provided soon
+
+            # # Using Test data for wallet_addresses list
+            # # with predefined wallet_Address
+
+            # Currently we are using UUID based on the host ID and current time
+            # uid = uuid.uuid1()
+            
+            if uuid==uuid_linked_walletAddr[walt_addr]:
+                # return contact_details[uuid]
+                return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': 'Successfully Fetched Contact List', 'contact_list':contact_details[uuid]})
+
+            else:
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': 'Verification Failed', 'contact_list':contact_details['UNv3RifiEd_DA74']})
+            
+
+            
+
+        except:
+                output = "An ERROR occured\nContacts are not fetched Successfully"
+                # print(output)
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
+    return JsonResponse({'Response Code':200})
+
+
+def fetch_indv_contact_details(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            uuid = data['uuid']
+            walt_addr= data['current_WalletAddress']
+            rcvr_pmry_addr = data['rcvr_pmry_addr']
+
+
+    #         '5fa6aee8-cf80-11ec-9735-82304926de9b': {
+    #     'totalContacts':2,
+    #     'contactsList':{
+    #         0:{
+    #             'name': 'Arijit Bhowmick',
+    #             'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+    #             'walletList':[
+    #                 {
+    #                     'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+    #                     'networkId':42,
+    #                 }
+    #             ]
+    #         },
+
+    #         1:{
+    #             'name': 'Suraj Disoja',
+    #             'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+    #             'walletList':[
+    #                 {
+    #                     'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+    #                     'networkId':42,
+    #                 }
+
+    #             ]
+    #         }
+    #     },
+
+    # },
+
+            if (uuid==uuid_linked_walletAddr[walt_addr]):
+
+                for i in range(contact_details[uuid]['totalContacts']):
+                    if rcvr_pmry_addr==contact_details[uuid]['contactsList'][i]['primary_wallet_address']:
+                        return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': 'Contact Data Fetched Successfully', 'contact_detail':contact_details[uuid]['contactsList'][i]})
+            
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': 'Verification Failed', 'contact_detail':contact_details['UNv3RifiEd_DA74']})
+
+    
+            else:
+                return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': 'Verification Failed', 'contact_detail':contact_details['UNv3RifiEd_DA74']})
+
+
+
+        except:
+            output = "An ERROR occured\nContact detail not fetched Successfully"
+            # print(output)
+            return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
+    return JsonResponse({'Response Code':200})
+
 
 def fetch_paid_txn(request):
     if request.method == "POST":
@@ -118,7 +537,7 @@ def fetch_messages(request):
             # First the fetcher data will be fetched according to nonce value to a particular receiver
             # Then the receivers data similarly
             # About the conversation between
-            # 0xd17d369fffcd92e713cf482e6eceda693bf7c8b9 & 0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9
+            # 0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9 & 0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9
             # Only the Upper two addresses are considered for now
             # for testing purpose.
             # Where both are sender and reveiver
@@ -128,44 +547,46 @@ def fetch_messages(request):
             fetcher = data['fetcher']
             receiver = data['receiver']
 
-            # # Test Communication Data
+            # Test Communication Data
 
-            communicators = {'fetcher':fetcher, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9'}
-            if receiver!=communicators['receiver']:
-                output = f"Messages Fetched Successfully\nTotal 0 Messages fetched between {fetcher} & {receiver}"
+            # communicators = {'fetcher':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622'}
+            # if (f"{fetcher}-{receiver}" in communication_data) and (f"{}-{receiver}"):
+                # output = f"Messages Fetched Successfully\nTotal 0 Messages fetched between {fetcher} & {receiver}"
 
-                return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output, 'message_data':[]})
+                # return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output, 'message_data':[]})
+
             # communication_data = {
 
-            #     '0xd17d369fffcd92e713cf482e6eceda693bf7c8b9': {
-            #     1650707120.936152: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':0, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hello Man Whats Up', 'timestamp':1650707120.936152},
-            #     1650707282.4517663: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':1, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'What\'s going on ?', 'timestamp':1650707282.4517663},
-            #     1650707328.6830337: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':2, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'I am just watching a movie...', 'timestamp':1650707328.6830337},
-            #     1650707338.0125976: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':3, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hey Man Are You Still there ?', 'timestamp':1650707338.0125976},
-            #     1650707348.8427203: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':4, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Mannn.. Again you are offline ... -_- ', 'timestamp':1650707348.8427203}
+            #     '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9-0XFFE39E1461D0361C3D72658EF39AE76288C82622':{
+            #         1650707120.936152: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':0, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
+            #         1650707282.4517663: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':1, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
+            #         1650707328.6830337: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':2, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
+            #         1650707338.0125976: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':3, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
+            #         1650707348.8427203: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':4, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
             #     },
-
-            #     '0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9': {
-            #     1650707156.6189778: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':0, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'I am good what\'s you doing ? ', 'timestamp':1650707156.6189778},
-            #     1650707290.8573165: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':1, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'Nothing much, Just chilling with laptop', 'timestamp':1650707290.8573165},
-
-            #     }
+                
+            #     '0XFFE39E1461D0361C3D72658EF39AE76288C82622-0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9':{
+            #         1650707156.6189778: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':0, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
+            #         1650707290.8573165: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':1, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
+            #     },
+                
+                
             # }
-            communication_data = {
-                1650707120.936152: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':0, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
-                1650707282.4517663: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':1, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
-                1650707328.6830337: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':2, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
-                1650707338.0125976: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':3, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
-                1650707348.8427203: {'sender':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'nonce':4, 'receiver':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
-                1650707156.6189778: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':0, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
-                1650707290.8573165: {'sender':'0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9', 'nonce':1, 'receiver':'0xd17d369fffcd92e713cf482e6eceda693bf7c8b9', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
-            }
+            
+            if (f"{fetcher}-{receiver}" in communication_data):
+                key = f"{fetcher}-{receiver}"
+            elif (f"{receiver}-{fetcher}" in communication_data):
+                key = f"{receiver}-{fetcher}"
+            else:
+                key = 0
 
-            total_msg_count = len(communication_data.keys())
+            if key == 0:return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': f"Messages Fetched Successfully\nTotal 0 Messages fetched between {fetcher} & {receiver}"})
             ordered_message_data = []
+            total_msg_count = len(communication_data[key])
+        
 
-            for timestamp in sorted(communication_data.keys()):
-                ordered_message_data+=[communication_data[timestamp]]
+            for timestamp in sorted(communication_data[key]):
+                ordered_message_data+=[communication_data[key][timestamp]]
 
             output = f"Messages Fetched Successfully\nTotal {total_msg_count} Messages fetched between {fetcher} & {receiver}"
 

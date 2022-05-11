@@ -32,6 +32,92 @@ $("#status-options ul li").click(function() {
 	$("#status-options").removeClass("active");
 });
 
+
+// Dragable DIVs with ID
+// dragElement(document.getElementById('settings_tab'));
+// dragElement(document.getElementById('new-contact-detail'));
+// dragElement(document.getElementById('rcvr-wallet-lst-box'));
+
+// $(function() {
+// 	$('#new-contact-detail').draggable();
+// });
+
+// // Wait for HTML document to get ready
+// window.addEventListener('load', function() { // NOT `DOMContentLoaded`
+// 	// Do something about HTML document
+// 	draggable = new PlainDraggable($('#new-contact-detail')[0]);
+// });
+
+
+// window.addEventListener('load', function() { // NOT `DOMContentLoaded`
+// 	const wrapper = document.querySelector(".new-contact-detail"),
+// 	header = wrapper.querySelector("div");
+
+// 	function onDrag({movementX, movementY}){
+// 		let getStyle = window.getComputedStyle(wrapper);
+// 		let leftVal = parseInt(getStyle.left);
+// 		let topVal = parseInt(getStyle.top);
+// 		wrapper.style.left = `${leftVal + movementX}px`;
+// 		wrapper.style.top = `${topVal + movementY}px`;
+// 	}
+// 	header.addEventListener("mousedown", ()=>{
+// 		header.classList.add("active");
+// 		header.addEventListener("mousemove", onDrag);
+// 	});
+// 	document.addEventListener("mouseup", ()=>{
+// 		header.classList.remove("active");
+// 		header.removeEventListener("mousemove", onDrag);
+// 	});
+// });
+
+
+
+// Drag div with ID function Started
+
+// Make the DIV element draggable:
+
+function dragElement(elmnt) {
+	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+	if (document.getElementById(elmnt.id + "header")) {
+		// if present, the header is where you move the DIV from:
+		document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+	} else {
+		// otherwise, move the DIV from anywhere inside the DIV:
+		elmnt.onmousedown = dragMouseDown;
+	}
+
+	function dragMouseDown(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// get the mouse cursor position at startup:
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		document.onmouseup = closeDragElement;
+		// call a function whenever the cursor moves:
+		document.onmousemove = elementDrag;
+	}
+
+	function elementDrag(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// calculate the new cursor position:
+		pos1 = pos3 - e.clientX;
+		pos2 = pos4 - e.clientY;
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		// set the element's new position:
+		elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+		elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+	}
+
+	function closeDragElement() {
+		// stop moving when mouse button is released:
+		document.onmouseup = null;
+		document.onmousemove = null;
+	}
+}
+// Drag div with ID function END Here
+
 // On Application Start
 var contact_selected = 0;
 document.getElementsByClassName('message-input')[0].style.display= 'none';
@@ -128,14 +214,15 @@ function fetch_message(fetcher, receiver){
 	else{
 		console.log(data.output);
 
-		validity_chk_data = {'status':data.msg_status, 'color':data.color}
+		// validity_chk_data = {'status':data.msg_status, 'color':data.color}
+		update_status(data.msg_status, 1000);
 
-		document.getElementById("msg-send-confirm").textContent = data.msg_status;
-		document.getElementById("msg-send-confirm").style.color = data.color;
+		// document.getElementById("msg-send-confirm").textContent = data.msg_status;
+		// document.getElementById("msg-send-confirm").style.color = data.color;
 
-		setTimeout(function() {
-			document.getElementById("msg-send-confirm").textContent = '';
-		}, 1000);
+		// setTimeout(function() {
+		// 	document.getElementById("msg-send-confirm").textContent = '';
+		// }, 1000);
 
 		msg_data = data.message_data
 
@@ -149,21 +236,21 @@ function fetch_message(fetcher, receiver){
 					$('<li class="sent"><img src="'+$("#profile-img")[0]['src']+'" alt="" /><p>' + msg_data[i]['message'] + '</p></li>').appendTo($('.messages ul'));
 					// $('#message').val(null);
 					if (i+1 == msg_data.length){
-						var last_msg_sndr = 'You';
+						var last_msg_sndr = 'You: ';
 					};
 					
 				}
 				else if (msg_data[i]['sender'] == receiver){
 					$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + msg_data[i]['message'] + '</p></li>').appendTo($('.messages ul'));
 					if (i+1 == msg_data.length){
-						var last_msg_sndr =  $('.'+receiver+' .wrap .meta .name')[0]['innerText'];
+						var last_msg_sndr =  '';
 					};
 				};
 				
 				
 			}
 			
-			$('.'+receiver+' .wrap .meta .preview')[0]['innerHTML'] = '<span>'+last_msg_sndr+': </span>' + msg_data[msg_data.length-1]['message']
+			$('.'+receiver+' .wrap .meta .preview')[0]['innerHTML'] = '<span>'+last_msg_sndr+'</span>' + msg_data[msg_data.length-1]['message']
 			$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 		}
 	}
@@ -176,7 +263,7 @@ function fetch_message(fetcher, receiver){
 // Generate Random Static Sender Pic
 $("#profile-img")[0]['src'] = getRandomProfileimg();
 
-var validity_chk_data={};
+// var validity_chk_data={};
 
 function chk_addr_validity(addr){
 
@@ -200,14 +287,15 @@ function chk_addr_validity(addr){
 	else{
 		console.log(data.output);
 	}
-	validity_chk_data = {'status':data.msg_status, 'color':data.color}
 
-	document.getElementById("msg-send-confirm").textContent = data.msg_status;
-	document.getElementById("msg-send-confirm").style.color = data.color;
+	// validity_chk_data = {'status':data.msg_status, 'color':data.color}
+	update_status(data.msg_status, 1000);
+	// document.getElementById("msg-send-confirm").textContent = data.msg_status;
+	// document.getElementById("msg-send-confirm").style.color = data.color;
 
-	setTimeout(function() {
-		document.getElementById("msg-send-confirm").textContent = '';
-	}, 1000);
+	// setTimeout(function() {
+	// 	document.getElementById("msg-send-confirm").textContent = '';
+	// }, 1000);
 
 	
 	});
@@ -215,22 +303,25 @@ function chk_addr_validity(addr){
 };
 
 // Receiver Wallet Address List Box
-var modal = null
- function AddNewContactForm() {
-   if(modal === null) {
-     document.getElementById("new-contact-detail").style.display = "block";
-     modal = true
-   } else {
-     document.getElementById("new-contact-detail").style.display = "none";
-     modal = null
-   }
- }
+
+function addNewContactForm() {
+   if($("#new-contact-detail")[0].style.display == "" ) {
+	$("#new-contact-detail")[0].style.display = 'block';
+   } 
+   else if ($("#new-contact-detail")[0].style.display == 'block' ) {
+	$("#new-contact-detail")[0].style.display = "";
+	$("#new-contact-detail")[0].style.top = "50%";
+	$("#new-contact-detail")[0].style.left = "50%";
+
+   };
+ };
 
 
 function newContact() {
 	new_Receiver_Address = $("#newReceiverAddress").val();
-        
-    if($.trim(new_Receiver_Address) == '') {
+	new_Receiver_Name = $("#newReceiverName").val();
+
+    if($.trim(new_Receiver_Address) == '' || $.trim(new_Receiver_Name) == ''){
         return false;
     }
 
@@ -238,14 +329,15 @@ function newContact() {
 	$.ajax({
 		data : JSON.stringify({
 		networkID : ethereum.networkVersion,
-		sender_address : ethereum.selectedAddress,
+		sender_address : ethereum.selectedAddress.toUpperCase(),
 		receiver_address : new_Receiver_Address,
+		receiver_name : new_Receiver_Name,
 			}),
 		type : 'POST',
 		url : '/api/chk_addr_validity',
 		dataType: 'json',
 		contentType: 'application/json',
-		headers: {'sender_address': ethereum.selectedAddress, 'receiver_address':new_Receiver_Address, 'X-CSRFToken':csrf_token}
+		headers: {'sender_address': ethereum.selectedAddress, 'receiver_address':new_Receiver_Address, 'receiver_name' : new_Receiver_Name, 'X-CSRFToken':csrf_token}
 	}).done(function(data) {
 	$('#output').text(data.output).show();
 
@@ -256,30 +348,34 @@ function newContact() {
 	else{
 		console.log(data.output);
 	}
-	validity_chk_data = {'status':data.msg_status, 'color':data.color}
+	// validity_chk_data = {'status':data.msg_status, 'color':data.color}
 
-	document.getElementById("msg-send-confirm").textContent = data.msg_status;
-	document.getElementById("msg-send-confirm").style.color = data.color;
+	update_status(data.msg_status, 1000);
+	// document.getElementById("msg-send-confirm").textContent = data.msg_status;
+	// document.getElementById("msg-send-confirm").style.color = data.color;
 
-	setTimeout(function() {
-		document.getElementById("msg-send-confirm").textContent = '';
-	}, 1000);
+	// setTimeout(function() {
+	// 	document.getElementById("msg-send-confirm").textContent = '';
+	// }, 1000);
 
 	// Show status and colour & add contact
-	document.getElementById("newContactValidityStatus").style.color = validity_chk_data['color'];
+	// document.getElementById("newContactValidityStatus").style.color = validity_chk_data['color'];
+	document.getElementById("newContactValidityStatus").style.color = getStatusColor(data.msg_status);
 
-	if (validity_chk_data['status'] == "SUCCESS"){
+
+	// if (validity_chk_data['status'] == "SUCCESS"){
+	if (data.msg_status == "SUCCESS"){
 		document.getElementById("newContactValidityStatus").textContent = "Address is correct for current networkID: "+ethereum.networkVersion+" (Check details in console)";
-		$('<li onclick="view_conversation($(this).attr(\'address-receiver\'))" address-receiver='+new_Receiver_Address+' class="contact '+new_Receiver_Address+'"><div class="wrap"><span class="contact-status"></span><img src="'+getRandomProfileimg()+'" alt="" /><div class="meta"><p class="name">'+new_Receiver_Address+'</p><p class="preview"><span>You:</span> Added Contact</p></div></div></li>};').appendTo($('#contacts ul'));
+		$('<li onclick="view_conversation($(this).attr(\'address-receiver\'))" address-receiver='+new_Receiver_Address+' class="contact '+new_Receiver_Address+'"><div class="wrap"><span class="contact-status"></span><img src="'+getRandomProfileimg()+'" alt="" /><div class="meta"><p class="name">'+new_Receiver_Name+'</p><p class="preview"><span>You:</span> Added Contact</p></div></div></li>};').appendTo($('#contacts ul'));
 		
 		setTimeout(function() {
-			AddNewContactForm()
+			addNewContactForm()
 			$('#newReceiverAddress').val(null);
 			document.getElementById("newContactValidityStatus").textContent = '';
 		}, 2000);
 		
 	}
-	else if (validity_chk_data['status'] == "FAILED"){
+	else if (data.msg_status == "FAILED"){
 		document.getElementById("newContactValidityStatus").textContent = "Address is incorrect for current networkID: "+ethereum.networkVersion+" (Check details in console)";
 	};
 
@@ -300,7 +396,7 @@ function newContact() {
 	// 	$('<li class="contact"><div class="wrap"><span class="contact-status"></span><img src="'+getRandomProfileimg()+'" alt="" /><div class="meta"><p class="name">'+new_Receiver_Address+'</p><p class="preview"><span>You:</span> Added Contact</p></div></div></li>};').appendTo($('#contacts ul'));
 		
 	// 	setTimeout(function() {
-	// 		AddNewContactForm()
+	// 		addNewContactForm()
 	// 		$('#newReceiverAddress').val(null);
 	// 		document.getElementById("newContactValidityStatus").textContent = '';
 	// 	}, 2000);
@@ -341,10 +437,271 @@ $('.submit').click(function() {
 
 // Redirections
 
-document.getElementById("settings").onclick = function () {
-    location.href = '/user/account';
+// document.getElementById("settings").onclick = function () {
+//     location.href = '/user/account';
+// };
+
+
+// Fetch StartUp Data
+
+var uuid;
+
+function fetch_StartUp_Data(){
+	$.ajax({
+		data : JSON.stringify({
+		current_WalletAddress : ethereum.selectedAddress.toUpperCase(),
+			}),
+		type : 'POST',
+		url : '/api/fetch_startup_data',
+		dataType: 'json',
+		contentType: 'application/json',
+		headers: {'current_WalletAddress' : ethereum.selectedAddress, 'X-CSRFToken':csrf_token}
+	}).done(function(data) {
+	$('#output').text(data.output).show();
+
+	// Show Message Status Success/Failure
+	if (data.error != undefined){
+		console.log(data.error);
+	}
+	else{
+		console.log(data.output);
+	}
+
+	update_status(data.msg_status, 1000);
+
+	// document.getElementById("msg-send-confirm").textContent = data.msg_status;
+	// document.getElementById("msg-send-confirm").style.color = data.color;
+
+	// setTimeout(function() {
+	// 	document.getElementById("msg-send-confirm").textContent = '';
+	// }, 1000);
+
+	// Show status and colour & add contact
+	// document.getElementById("newContactValidityStatus").style.color = validity_chk_data['color'];
+	
+	if (data.msg_status == "SUCCESS"){
+		contact_list_data = data.basic_UserData;
+		// uuid = data.basic_UserData[0]; // Fetch uuid from the Server
+		connected_wallets = data.basic_UserData[1]['connected_wallets'];
+
+		$('#uuid')[0].textContent = data.basic_UserData[0];
+		uuid = data.basic_UserData[0];
+		for (let i = 0; i < connected_wallets.length; i++) {
+
+			if (connected_wallets[i]['wallet_address'] == data.basic_UserData[1]['primary_wallet_address']){
+				$('<option style="color:'+getStatusColor('SUCCESS')+'" value="'+connected_wallets[i]['wallet_address']+'"> '+connected_wallets[i]['wallet_address']+' </option>').appendTo($('#CurrentUser_WalletAddresses'));
+			}
+			else{
+				$('<option value="'+connected_wallets[i]['wallet_address']+'"> '+connected_wallets[i]['wallet_address']+' </option>').appendTo($('#CurrentUser_WalletAddresses'));
+			};
+		};
+		
+		// setTimeout(function() {
+		// 	addNewContactForm()
+		// 	$('#newReceiverAddress').val(null);
+		// 	document.getElementById("newContactValidityStatus").textContent = '';
+		// }, 2000);
+	}
+
+	});
 };
 
+// function fetch_uuid(){
+// 	$.ajax({
+// 		data : JSON.stringify({
+// 		current_WalletAddress : ethereum.selectedAddress.toUpperCase(),
+// 			}),
+		
+// 		type : 'POST',
+// 		url : '/api/fetch_uuid',
+// 		dataType: 'json',
+// 		contentType: 'application/json',
+// 		headers: {'current_WalletAddress' : ethereum.selectedAddress, 'X-CSRFToken':csrf_token}
+// 	}).done(function(data) {
+// 	$('#output').text(data.output).show();
+// 		return data.uuid;
+// 	});
+// };
+
+// Fetch Contact Lists
+
+function fetch_contactList(){
+
+
+	$.ajax({
+		data : JSON.stringify({
+		current_WalletAddress : ethereum.selectedAddress.toUpperCase(),
+			}),
+		
+		type : 'POST',
+		url : '/api/fetch_uuid',
+		dataType: 'json',
+		contentType: 'application/json',
+		headers: {'current_WalletAddress' : ethereum.selectedAddress, 'X-CSRFToken':csrf_token}
+	}).done(function(data) {
+	// $('#output').text(data.output).show();
+
+	
+
+		// uuid = $('#uuid')[0].textContent
+		$.ajax({
+			data : JSON.stringify({
+			uuid : uuid,
+			current_WalletAddress : ethereum.selectedAddress.toUpperCase(),
+				}),
+			
+			type : 'POST',
+			url : '/api/fetch_contacts',
+			dataType: 'json',
+			contentType: 'application/json',
+			headers: {'uuid': uuid, 'current_WalletAddress' : ethereum.selectedAddress, 'X-CSRFToken':csrf_token}
+		}).done(function(data) {
+		$('#output').text(data.output).show();
+
+		// Show Message Status Success/Failure
+		if (data.error != undefined){
+			console.log(data.error);
+		}
+		else{
+			console.log(data.output);
+		}
+
+		update_status(data.msg_status, 1000);
+
+		// document.getElementById("msg-send-confirm").textContent = data.msg_status;
+		// document.getElementById("msg-send-confirm").style.color = data.color;
+
+		// setTimeout(function() {
+		// 	document.getElementById("msg-send-confirm").textContent = '';
+		// }, 1000);
+
+		// Show status and colour & add contact
+		// document.getElementById("newContactValidityStatus").style.color = validity_chk_data['color'];
+		
+		if (data.msg_status == "SUCCESS"){
+			contact_list_data = data.contact_list;
+
+			for (let i = 0; i < data.contact_list['totalContacts']; i++) {
+				// $('<li onclick="view_conversation($(this).attr(\'address-receiver\'))" address-receiver='+data.contact_list['contactsList'][i]['primary_wallet_address']+' class="contact '+data.contact_list['contactsList'][i]['primary_wallet_address']+'"><div class="wrap"><span class="contact-status"></span><img src="'+getRandomProfileimg()+'" alt="" /><div class="meta"><p class="name">'+data.contact_list['contactsList'][i]['name']+'</p><p class="preview"><span>SERVER:</span> Click to View Conversation</p></div></div></li>};').appendTo($('#contacts ul'));
+				$('<li onclick="view_conversation($(this).attr(\'address-receiver\'))" address-receiver='+data.contact_list['contactsList'][i]['primary_wallet_address']+' class="contact '+data.contact_list['contactsList'][i]['primary_wallet_address']+'"><div class="wrap"><span class="contact-status"></span><img src="'+getRandomProfileimg()+'" alt="" /><div class="meta"><p class="name">'+data.contact_list['contactsList'][i]['name']+'</p><p class="preview"><span></span> </p></div></div></li>};').appendTo($('#contacts ul'));
+				
+			}
+			
+			// setTimeout(function() {
+			// 	addNewContactForm()
+			// 	$('#newReceiverAddress').val(null);
+			// 	document.getElementById("newContactValidityStatus").textContent = '';
+			// }, 2000);
+			
+		}
+
+		});
+	});
+};
+
+
+
+function fetch_CurrentUser_WalletAddress(){
+	$.ajax({
+		data : JSON.stringify({
+		networkID : ethereum.networkVersion,
+		sender_address : ethereum.selectedAddress.toUpperCase(),
+		receiver_address : new_Receiver_Address,
+		receiver_name : new_Receiver_Name,
+			}),
+		type : 'POST',
+		url : '/api/chk_addr_validity',
+		dataType: 'json',
+		contentType: 'application/json',
+		headers: {'sender_address': ethereum.selectedAddress, 'receiver_address':new_Receiver_Address, 'receiver_name' : new_Receiver_Name, 'X-CSRFToken':csrf_token}
+	}).done(function(data) {
+	$('#output').text(data.output).show();
+
+	// Show Message Status Success/Failure
+	if (data.error != undefined){
+		console.log(data.error);
+	}
+	else{
+		console.log(data.output);
+	}
+	validity_chk_data = {'status':data.msg_status, 'color':data.color};
+
+	update_status(data.msg_status, 1000);
+
+	// document.getElementById("msg-send-confirm").textContent = data.msg_status;
+	// document.getElementById("msg-send-confirm").style.color = data.color;
+
+	// setTimeout(function() {
+	// 	document.getElementById("msg-send-confirm").textContent = '';
+	// }, 1000);
+
+	// Show status and colour & add contact
+	document.getElementById("newContactValidityStatus").style.color = validity_chk_data['color'];
+
+	if (validity_chk_data['status'] == "SUCCESS"){
+		document.getElementById("newContactValidityStatus").textContent = "Address is correct for current networkID: "+ethereum.networkVersion+" (Check details in console)";
+		$('<li onclick="view_conversation($(this).attr(\'address-receiver\'))" address-receiver='+new_Receiver_Address+' class="contact '+new_Receiver_Address+'"><div class="wrap"><span class="contact-status"></span><img src="'+getRandomProfileimg()+'" alt="" /><div class="meta"><p class="name">'+new_Receiver_Address+'</p><p class="preview"><span>You:</span> Added Contact</p></div></div></li>};').appendTo($('#contacts ul'));
+		
+		setTimeout(function() {
+			addNewContactForm()
+			$('#newReceiverAddress').val(null);
+			document.getElementById("newContactValidityStatus").textContent = '';
+		}, 2000);
+		
+	}
+	else if (validity_chk_data['status'] == "FAILED"){
+		document.getElementById("newContactValidityStatus").textContent = "Address is incorrect for current networkID: "+ethereum.networkVersion+" (Check details in console)";
+	};
+
+	});
+}
+
+function settings(){
+	$(".settings-info-logo")[0].src = $("#profile-img")[0].src
+	
+
+	if ($(".settings")[0].style.display == ''){
+		$(".settings")[0].style.display = 'block';
+		$(".settings .settings-info .wrap-settings-info .settings-info-form .wrap-info-input input")[0].value = ethereum.selectedAddress;
+		
+		// Fetch Basic User Data
+		fetch_StartUp_Data();
+	}
+	else if ($(".settings")[0].style.display == 'block'){
+		$(".settings")[0].style.display = '';
+		$(".settings")[0].style.top = "50%";
+		$(".settings")[0].style.left = "50%";
+	}
+	
+};
+
+
+// Status Message Update
+
+
+function getStatusColor(status){
+	statusHexCodes = {
+		'SUCCESS':'#2ecc71',
+		'FAILED':'#e74c3c',
+		'PENDING':'#f1c40f',
+		'PROCESSING':'#f1c40f'
+	}
+	return statusHexCodes[status]
+};
+
+function update_status(status_detail) {
+	// 'status_detail' is a array
+	// which consist of ('SUCCESS/FAILED/PENDING/PROCESSING', 'Timeout')
+	// Timeout => 1000 equals 1sec
+
+	document.getElementById("msg-send-confirm").textContent = status_detail[0];
+	document.getElementById("msg-send-confirm").style.color = getStatusColor(status_detail[0]);
+
+	setTimeout(function() {
+		document.getElementById("msg-send-confirm").textContent = '';
+	}, status_detail[1]);
+
+};
 
 
 // Open Conversation
@@ -374,6 +731,7 @@ function view_conversation(rcvr_addr) {
 	// Update Message Field
 	document.getElementById('rcvr_name').innerHTML = rcvr_name;
 	document.getElementById('receiver-img').src = rcvr_img;
+
 	if ($('.messages ul')[0] != undefined){
 		$('.messages ul')[0]['innerHTML'] = '';
 	}
@@ -401,23 +759,152 @@ function view_conversation(rcvr_addr) {
 	};
 	
 
+
+	// $.ajax({
+	// 	data : JSON.stringify({
+	// 	uuid : $('#uuid')[0].textContent,
+	// 	current_WalletAddress : ethereum.selectedAddress.toUpperCase(),
+	// 	rcvr_pmry_addr : rcvr_addr,
+	// 		}),
+	// 	type : 'POST',
+	// 	url : '/api/fetch_indv_contact_details',
+	// 	dataType: 'json',
+	// 	contentType: 'application/json',
+	// 	headers: {'current_WalletAddress': ethereum.selectedAddress, 'rcvr_pmry_addr':rcvr_addr, 'X-CSRFToken':csrf_token}
+	// }).done(function(data) {
+	// $('#output').text(data.output).show();
+
+	// 	// Show Message Status Success/Failure
+	// 	if (data.error != undefined){
+	// 		console.log(data.error);
+	// 	}
+	// 	else{
+	// 		console.log(data.output);
+	// 	}
+
+	// 	update_status(data.msg_status, 1000);
+
+	// 	for (let i = 0; i < data.contact_detail['walletList'].length; i++) {
+	// 		$('<option value="'+data.contact_detail["walletList"][i]["wallet_address"]+'"> '+data.contact_detail["walletList"][i]["wallet_address"]+' </option>').appendTo($('#Receiver_WalletAddresses'));
+
+	// 	}
+
+		
+
+		
+	// });
+	
 	// Update Receiver Wallet Address List
 	$("#rcvr-wallet-lst-box p")[0]['textContent'] = rcvr_addr;
 	document.getElementById('receiver').value = rcvr_addr;
 
+	
+
+	
+
 	// Fetch Conversation Between the sender & Receiver
-	fetch_message(ethereum.selectedAddress, rcvr_addr);
+	fetch_message(ethereum.selectedAddress.toUpperCase(), rcvr_addr);
 };
 
+
 // Receiver Wallet Address List Box
-var modal = null
+// var modal = null
  function wallet_addr_list() {
+
 	document.getElementById('receiver-wallet-lst-img').src=$(".contact-profile #receiver-img")[0]['src'];
-   if(modal === null) {
-     document.getElementById("rcvr-wallet-lst-box").style.display = "block";
-     modal = true
-   } else {
-     document.getElementById("rcvr-wallet-lst-box").style.display = "none";
-     modal = null
-   }
- }
+
+	if($("#rcvr-wallet-lst-box")[0].style.display == "" ) {
+		$("#rcvr-wallet-lst-box")[0].style.display = 'block';
+
+		active_rcvr_addr = $('#contacts ul .active')[0]['classList'][1];
+
+		$.ajax({
+			data : JSON.stringify({
+			uuid : $('#uuid')[0].textContent,
+			current_WalletAddress : ethereum.selectedAddress.toUpperCase(),
+			rcvr_pmry_addr : active_rcvr_addr,
+				}),
+			type : 'POST',
+			url : '/api/fetch_indv_contact_details',
+			dataType: 'json',
+			contentType: 'application/json',
+			headers: {'current_WalletAddress': ethereum.selectedAddress, 'rcvr_pmry_addr':active_rcvr_addr, 'X-CSRFToken':csrf_token}
+		}).done(function(data) {
+		$('#output').text(data.output).show();
+	
+			// Show Message Status Success/Failure
+			if (data.error != undefined){
+				console.log(data.error);
+			}
+			else{
+				console.log(data.output);
+			}
+	
+			update_status(data.msg_status, 1000);
+			// $('#Receiver_WalletAddresses')[0].innerHTML = '';
+	
+			if (data.contact_detail['walletList'].length<=1){
+				$('#Receiver_WalletAddresses')[0].outerHTML = '<select id=\"Receiver_WalletAddresses\" name=\"Receiver Connected Wallets\" size=\"'+1+'\" multiple=\"multiple\"></select>';
+			}
+			else{
+				$('#Receiver_WalletAddresses')[0].outerHTML = '<select id=\"Receiver_WalletAddresses\" name=\"Receiver Connected Wallets\" size=\"'+2+'\" multiple=\"multiple\"></select>';
+			};
+			
+			for (let i = 0; i < data.contact_detail['walletList'].length; i++) {
+				$('<option value="'+data.contact_detail["walletList"][i]["wallet_address"]+'"> '+data.contact_detail["walletList"][i]["wallet_address"]+' </option>').appendTo($('#Receiver_WalletAddresses'));
+	
+			}
+		});
+
+
+	} 
+	else if ($("#rcvr-wallet-lst-box")[0].style.display == 'block' ) {
+		$("#rcvr-wallet-lst-box")[0].style.display = "";
+		$("#rcvr-wallet-lst-box")[0].style.top = "50%";
+		$("#rcvr-wallet-lst-box")[0].style.left = "50%";
+
+	}
+//    if(modal === null) {
+//      document.getElementById("rcvr-wallet-lst-box").style.display = "block";
+//      modal = true
+//    } else {
+//      document.getElementById("rcvr-wallet-lst-box").style.display = "none";
+//      modal = null
+//    }
+
+	$('#Receiver_WalletAddresses')[0].innerHTML = '';
+
+
+	
+};
+
+// On Startup run the Functions
+
+// var startup_loaded = 0;
+// while (startup_loaded==0){
+
+
+// window.addEventListener('load', function() { // NOT `DOMContentLoaded`
+// 	// Do something about HTML document
+// 	// fetch_StartUp_Data();
+// 	// fetch_contactList();
+// });
+
+function load_on_startup(){
+	// // try{
+	// $.when(fetch_StartUp_Data()).then(
+	// 	fetch_contactList()
+	// );
+
+
+	fetch_StartUp_Data();
+	fetch_contactList();
+	// $.when(fetch_StartUp_Data()).then(function(){
+	// 	fetch_contactList();
+	// })
+	// fetch_contactList();
+		// startup_loaded=1;
+	// }
+	// catch(e){};
+		
+};

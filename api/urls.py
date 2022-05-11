@@ -7,4 +7,11 @@ urlpatterns = [
     path("set_wallet", views.set_wallet_session, name="set_wallet_session"),
     path("send_msg", views.send_msg, name="send_msg"),
     path("fetch_messages", views.fetch_messages, name="fetch_messages"),
+    path("fetch_startup_data", views.fetch_startup_data, name="fetch_startup_data"),
+    path("fetch_contacts", views.fetch_contacts, name="fetch_contacts"),
+    path("fetch_uuid", views.fetch_uuid, name="fetch_uuid"),
+    path("fetch_indv_contact_details", views.fetch_indv_contact_details, name="fetch_indv_contact_details"),
+
+
+
 ]
