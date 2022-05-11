@@ -199,19 +199,22 @@ function getRandomProfileimg() {
 //fetch user's chats
 
 window.onload = function fetch_chat_ids(fetcher){
+	// console.log(fetcher);
 	$.ajax({
-		data: JSON.stringify({user:fetcher}),
+		data: JSON.stringify({user:ethereum.selectedAddress.toUpperCase()}),
 		type: 'POST',
 		url: '/api/chat_ids',
 		dataType: 'json',
 		contentType: 'application/json',
 		headers:{'X-CSRFToken':csrf_token}
 	}).done(function(data){
-		console.log(data)
+		console.log(data['chats'])
 		for(i=0;i<Object.keys(data.chats).length;i++){
+
 			current_chat_id = Object.keys(data.chats)[i];
 			console.log(current_chat_id)
 			users_in_room = data.chats[current_chat_id]
+
 			for(j=0;j<users_in_room.length;j++){
 				current_user = users_in_room[j]
 				console.log(users_in_room)
@@ -241,7 +244,7 @@ function fetch_message(fetcher, receiver){
 		dataType: 'json',
 		contentType: 'application/json',
 		headers: {fetcher : fetcher, 'X-CSRFToken':csrf_token}
-	}).done(function(data){displaymessages(data,fetcher,receiver,fromws=false)});
+	}).done(function(data){displaymessages(data,ethereum.selectedAddress.toUpperCase(),receiver,fromws=false)});
 };
 
 // initiate WS connection
@@ -300,8 +303,9 @@ function broadcaststatus(status){
 // updating code to display messages on the UI throught a common function... Required for WebSockets support.
 // fromws varible tells if the message was sent is from websocket of not.
 function displaymessages(data,fetcher,receiver,fromws=false) {
-	console.log(data,fetcher,receiver)
+	// console.log(data,fetcher,receiver)
 	$('#output').text(data.output).show();
+	receiver = $('#contacts ul .active')[0]['classList'][1];
 	// Show Message Status Success/Failure
 	if(fromws){
 		data = data.message;
@@ -330,6 +334,8 @@ function displaymessages(data,fetcher,receiver,fromws=false) {
 				
 				//console.log("looping")
 				//console.log(msg_data[i]['sender'].toUpperCase() == fetcher.toUpperCase())
+				console.log(msg_data[i]['sender'].toUpperCase(), fetcher.toUpperCase(), receiver.toUpperCase(), fromws);
+
 				if (msg_data[i]['sender'].toUpperCase() == fetcher.toUpperCase()){
 					console.log("sender is fetcher")
 					$('<li class="sent"><img src="'+$("#profile-img")[0]['src']+'" alt="" /><p>' + msg_data[i]['message'] + '</p></li>').appendTo($('.messages ul'));
@@ -344,12 +350,20 @@ function displaymessages(data,fetcher,receiver,fromws=false) {
 					$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + msg_data[i]['message'] + '</p></li>').appendTo($('.messages ul'));
 					if (i+1 == msg_data.length){
 						var last_msg_sndr =  '';
+						
 					};
-				};	
-			}
+				}
+				else if (fetcher.toUpperCase() == receiver.toUpperCase()){
+					$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + msg_data[i]['message'] + '</p></li>').appendTo($('.messages ul'));
+					if (i+1 == msg_data.length){
+						var last_msg_sndr =  '';
 			
-			$('.'+receiver+' .wrap .meta .preview')[0]['innerHTML'] = '<span>'+last_msg_sndr+'</span>' + msg_data[msg_data.length-1]['message']
-			$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+					};
+				};
+				// // $('.'+receiver+' .wrap .meta .preview')[0]['innerHTML'] = '<span>'+last_msg_sndr+'</span>' + msg_data[msg_data.length-1]['message']
+				$('.contact.active .preview').html('<span>'+last_msg_sndr+'</span>' + msg_data[msg_data.length-1]['message']);
+				$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+			}
 		}
 	}
 }

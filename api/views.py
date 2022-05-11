@@ -673,8 +673,35 @@ def chat_ids(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         user = data['user']
-        res = {"chats":{"test":['0x68237960f18f2b3a1555a39cd3427c52b98ad10b','0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b']}}
+        print("vmro User", user)
+
+        # res = {"chats":{
+        #         "room2":[
+        #             '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+        #             '0XFFE39E1461D0361C3D72658EF39AE76288C82622'
+        #         ],
+        #     },    
+        # }
+
+        res = {
+            '06d00a2cd16b11ecb96682304926de9b':[
+                '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+                '0XFFE39E1461D0361C3D72658EF39AE76288C82622'
+            ],
+
+            '0834fa43d16b11ec950282304926de9b':[
+                '0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+                '0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B'
+            ]
+        }
+
+        for i in res:
+            if user in res[i]:
+                return JsonResponse({'chats':{i:[res[i]]}})
         return JsonResponse(res)
+                
+        
+        
 
 @csrf_protect
 #@csrf_exempt
@@ -686,39 +713,39 @@ def set_wallet_session(request):
 
     return JsonResponse({'Response Code':200})
 
-# Fetch messages from etherium explorer and return JSON.
-@csrf_exempt
-def getMessages(request):
-    try:
-        if request.method == 'POST' and request.content_type == 'application/json':
-            data = json.loads(request.body)
-            wallet_address = data['wallet_address']
-            transactions = requests.get(f'https://api-kovan.etherscan.io/api?module=account&action=txlist&address={wallet_address}&startblock=0&endblock=99999999&sort=asc&apikey=V9EAM35F8F1RGRD3EPJAQQ4N97K9M37GMV',headers={"User-Agent":"IRC-DEV"})
-            transactions_json = transactions.json()
-            transactions_json_len = len(transactions_json['result'])
-            transactions_dict ={"sent":{},"received":{}}
-            for i in range(0,transactions_json_len):
-                sender_address = transactions_json['result'][i]['from']
-                receiver_address = transactions_json['result'][i]['to']
-                message_hex = transactions_json['result'][i]['input']
-                if sender_address == wallet_address:
-                    if receiver_address not in transactions_dict['sent']:
-                        transactions_dict['sent'][receiver_address] = []
-                        transactions_dict['sent'][receiver_address].append(message_hex)
-                    else:
-                        transactions_dict['sent'][receiver_address].append(message_hex)
-                elif receiver_address == wallet_address:
-                    if sender_address not in transactions_dict['received']:
-                        transactions_dict['received'][sender_address] = []
-                        transactions_dict['received'][sender_address].append(message_hex)
-                    else:
-                        transactions_dict['sent'][sender_address].append(message_hex)
-            response_json = {"result":transactions_dict}
-            return JsonResponse(response_json)
-        else:
-            return HttpResponseBadRequest()
-    except:
-        return HttpResponseServerError("Something Went Wrong")
-    return JsonResponse({'Response Code':200})
+# # Fetch messages from etherium explorer and return JSON.
+# @csrf_exempt
+# def getMessages(request):
+#     try:
+#         if request.method == 'POST' and request.content_type == 'application/json':
+#             data = json.loads(request.body)
+#             wallet_address = data['wallet_address']
+#             transactions = requests.get(f'https://api-kovan.etherscan.io/api?module=account&action=txlist&address={wallet_address}&startblock=0&endblock=99999999&sort=asc&apikey=V9EAM35F8F1RGRD3EPJAQQ4N97K9M37GMV',headers={"User-Agent":"IRC-DEV"})
+#             transactions_json = transactions.json()
+#             transactions_json_len = len(transactions_json['result'])
+#             transactions_dict ={"sent":{},"received":{}}
+#             for i in range(0,transactions_json_len):
+#                 sender_address = transactions_json['result'][i]['from']
+#                 receiver_address = transactions_json['result'][i]['to']
+#                 message_hex = transactions_json['result'][i]['input']
+#                 if sender_address == wallet_address:
+#                     if receiver_address not in transactions_dict['sent']:
+#                         transactions_dict['sent'][receiver_address] = []
+#                         transactions_dict['sent'][receiver_address].append(message_hex)
+#                     else:
+#                         transactions_dict['sent'][receiver_address].append(message_hex)
+#                 elif receiver_address == wallet_address:
+#                     if sender_address not in transactions_dict['received']:
+#                         transactions_dict['received'][sender_address] = []
+#                         transactions_dict['received'][sender_address].append(message_hex)
+#                     else:
+#                         transactions_dict['sent'][sender_address].append(message_hex)
+#             response_json = {"result":transactions_dict}
+#             return JsonResponse(response_json)
+#         else:
+#             return HttpResponseBadRequest()
+#     except:
+#         return HttpResponseServerError("Something Went Wrong")
+#     return JsonResponse({'Response Code':200})
   
 gen_chain_list()
