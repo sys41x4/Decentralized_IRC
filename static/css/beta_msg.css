@@ -704,6 +704,41 @@ a:hover {
   text-align: center;
   display: none;
 }
+
+.settings{
+  width: auto;
+  overflow: hidden;
+  background: #1e2020;
+  box-shadow: 0 0 50px black;
+  /* border-radius: 10px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  line-height: 50px;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  padding: 10px 10px;
+  text-align: center;
+  display: none;
+}
+
+/* .settings-info-logo {
+  cursor: move;
+} */
+
+#downloadYourData {
+  /* float: left; */
+  border: none;
+  border-right-width: medium;
+  width: 50%;
+  /* padding: 5px 0; */
+  background: #3276b1;
+  color: #f5f5f5;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-family: "proxima-nova", "Source Sans Pro", sans-serif;
+}
+
 /* #rcvr-wallet-lst-box span{
   font-size: 40px;
   display: block;
@@ -757,7 +792,7 @@ a:hover {
   background: #435f7a;
   text-decoration: none;
 }
-#addcontact {
+#addcontact{
   /* float: left; */
   border: none;
   border-right-width: medium;

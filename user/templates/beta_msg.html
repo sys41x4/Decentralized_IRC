@@ -107,9 +107,8 @@
 			<input type="text" placeholder="Search contacts..." />
 		</div>
 		<div id="contacts">
-			<ul id="contacts_holder">
-				<!--
-				<li class="contact">
+			<ul>
+				<!-- <li class="contact">
 					<div class="wrap">
 						<span class="contact-status online"></span>
 						<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
@@ -129,32 +128,21 @@
 						</div>
 					</div>
 				</li>
-				
-				 <li data-RcvrAddr="{{ recv }}" class="contact {{ recv }}">
-					<div class="wrap">
-						<span class="contact-status"></span>
-						<img src="https://i.postimg.cc/TPr9Dhc5/user29.png" alt="">
-						<div class="meta">
-							<p class="name">Arijit {{ recv }}</p>
-							<p class="preview"><span>You:</span> Added Contact</p>
-						</div>
-					</div>
-				</li> -->
-				<li onclick="view_conversation($(this).attr('address-receiver'))" address-receiver="{{ recv.lower }}" class="contact {{ recv.lower }}">
+				<li onclick="view_conversation($(this).attr('address-receiver'))" address-receiver="0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9" class="contact 0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9">
 					<div class="wrap">
 						<span class="contact-status"></span>
 						<img src="https://i.postimg.cc/N09hq8Bq/user13.png" alt="">
 						<div class="meta">
-							<p class="name">Arijit {{ recv }}</p>
+							<p class="name">Arijit 0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9</p>
 							<p class="preview"><span>You:</span> Added Contact</p>
 						</div>
 					</div>
-				</li>
+				</li> -->
 			</ul>
 		</div>
 		<div id="bottom-bar">
-			<button id="showContactForm" onclick="AddNewContactForm()"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-			<button id="settings" type="button" class="btn--stroke btn--small ss-modal-trigger"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+			<button id="showContactForm" onclick="addNewContactForm()"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+			<button id="settings" onclick="settings()" type="button" class="btn--stroke btn--small ss-modal-trigger"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
 		</div>
 	</div>
 
@@ -167,6 +155,10 @@
 			<div class="social-media">
                 <!-- <i id="rcvr_wallet" onclick="show_wallet_addr_list()" class='fas fa-wallet'></i> -->
 				<!-- <a class="btn" onclick="pop()">Show Box</a> -->
+				<div class="startup-logo">
+					<img style="width: 70%; border-radius: 0; margin:0; float:none" id="startup-logo" src="https://avatars.githubusercontent.com/u/66935336?v=4" alt="" />
+
+				</div>
 				<i id="rcvr-wallet" onclick="wallet_addr_list()" class='fas fa-wallet'></i>
 
 				<div id="msg-send-confirm"><h1></h1></div>
@@ -176,20 +168,93 @@
 					<a class="rcvr-wallet-lst-close" onclick="wallet_addr_list()">X</a><br>
 			        <h1>Receiver Wallet Address List</h1>
 					<p>asd</p>
+					<select id="Receiver_WalletAddresses" name="Receiver Connected Wallets" size="2" multiple="multiple"></select>
 				</div>
 				
-				<div id="new-contact-detail">
-					<a class="rcvr-wallet-lst-close" onclick="AddNewContactForm()">X</a><br><br>
-					<h1>Add New Contact</h1><br>
+				<div id="new-contact-detail" class="new-contact-detail">
+					<div class="header">
+						<span>New Contact</span>
+						<a class="rcvr-wallet-lst-close" onclick="addNewContactForm()">X</a><br>
+					</div>
+					
 					<p id='newContactValidityStatus'></p><br>
+					<input id="newReceiverName" type="text" placeholder="Name"><br><br>
 					<input id="newReceiverAddress" type="text" placeholder="Receiver Wallet Address"><br><br>
 					<button id="addcontact" onclick="newContact()"><span>Add</span></button>
 
 				</div>
-				<div class="startup-logo">
-					<img style="width: 70%; border-radius: 0; margin:0; float:none" id="startup-logo" src="https://avatars.githubusercontent.com/u/66935336?v=4" alt="" />
 
+				
+
+				<!-- Settings Window -->
+				<div id="settings_tab" class="limiter message-ui settings">
+					<div class="settings-info">
+						<div class="wrap-settings-info">
+					
+							<img src="https://avatars.githubusercontent.com/u/66935336?v=4" class="settings-info-logo" alt="">
+								
+								<span class="account-info-form-title bold-heading">
+									SETTINGS
+								</span>
+								<a class="rcvr-wallet-lst-close" onclick="settings()">X</a><br>
+								<label style="display: none;" id="uuid"></label>
+							<form class="settings-info-form validate-form" method="post">
+								{% csrf_token %}
+								<!-- <span class="account-info-form-logo">
+									<i class="zmdi zmdi-landscape"></i>
+								</span> -->
+								
+				
+								<div class="wrap-info-input validate-input regular-text">
+									<label for="wallet_address">Your Active Wallet address is</label><br>
+									<input readonly name="wallet_address" type="text" class="form-control" id="settings_wallet_address">
+								</div>
+				
+								<!-- <div class="regular-text">
+									<table>
+									<tr>
+										<th scope="row">Total Messages SEND</th>
+										<td>Test_Data</td>
+									</tr>
+				
+									<tr>
+										<th scope="row">FREE Messages SEND</th>
+										<td>Test_Data</td>
+									</tr>
+				
+									<tr>
+										<th scope="row">PAID Messages SEND</th>
+										<td>Test_Data</td>
+									</tr>
+									</table>
+								</div> -->
+
+								<!-- Task still left to implement -->
+								<!--
+								Implement Function for handling POST Request
+								Implement Function for handling "Download Data" 
+								For Example api request may be {wallet_address:<wallet_address>, <Download_Your_Data:<True/False OR 1/0>}
+								-->
+								<br>
+								<select id="CurrentUser_WalletAddresses" name="Connected Wallets" size="2" multiple="multiple"></select>
+
+
+								<div>
+									
+									<!-- <input style="margin-top: 30px" class="btn btn-primary btn-lg btn-block" type="submit" value="Download Your Data"> -->
+									<br>
+									<button id="downloadYourData" onclick=""><span>Download Your Data</span></button>
+								</div>
+							</form>
+				
+							<!-- <div>
+								<input style="margin-top: 30px; background-color: #3ba55d; border-color: #3ba55d;" class="btn btn-primary btn-lg btn-block" onclick="history.back()" value="Back">
+							</div> -->
+						</div>
+					</div>
 				</div>
+
+				<!-- Settings Window End -->
 
 				<!-- <a class="trigger_popup_fricc">Click here to show the popup</a> -->
 
@@ -200,7 +265,7 @@
 		</div>
 		<div class="messages">
 			<ul>
-				<li class="sent">
+				<!-- <li class="sent">
 					<img src="https://avatars.githubusercontent.com/u/62654117?v=4" alt="" />
 					<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
 				</li>
@@ -231,7 +296,7 @@
 				<li class="replies">
 					<img src="https://i.postimg.cc/nzP18Fwv/suraj-disoja.jpg" alt="" />
 					<p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-				</li>
+				</li> -->
 			</ul>
 		</div>
 		
