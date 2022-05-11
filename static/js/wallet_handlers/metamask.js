@@ -1,5 +1,5 @@
 let currentAccount = null;
-// const MERCHANT_ACCOUNT = '0x8cceF537C24864f566b29Fa11ed0aDC113B7BAF9'
+// const MERCHANT_ACCOUNT = '0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b'
 let g_wallet_address = null
 
 let wallet_name = 'Wallet';
@@ -133,9 +133,6 @@ function connect() {
 
 function get_api_response(err_occur){
 
-    
-
-
     if(err_occur == 1){
         document.getElementById("msg-send-confirm").textContent = 'FAILED';
         document.getElementById("msg-send-confirm").style.color = '#e74c3c';
@@ -173,6 +170,8 @@ function get_api_response(err_occur){
 
         if (data.msg_status=='SUCCESS'){
             // PUSH data to IPFS & WEB2 Storage
+            payload = {"type":"chat_message","message":{"msg_status": "SUCCESS", "color": "#2ecc71", "output": "Message Sent Successfully", "message_data": [{"sender": currentAccount, "nonce": 0, "receiver": receiver, "message": message, "networkId": 42, "timestamp": new Date().getTime()}]}}
+            send_ws_message(payload);
             $.ajax({
                 data : JSON.stringify({
                    sender : g_wallet_address,
@@ -201,8 +200,8 @@ function get_api_response(err_occur){
                 }, 1000);
                 
             
-                
-                    $('<li class="sent"><img src="'+$("#profile-img")[0]['src']+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+                //Commenting it out to avoid double message display
+                   // $('<li class="sent"><img src="'+$("#profile-img")[0]['src']+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
                     $('#message').val(null);
                     $('.contact.active .preview').html('<span>You: </span>' + message);
                     $(".messages").animate({ scrollTop: $(document).height() }, "fast");

@@ -5,6 +5,8 @@ def homepage(request):
     return render(request, 'homepage.html')
 
 def beta_message(request):
+    # receiver = request.GET['r']
+    # return render(request, 'beta_msg.html',{'recv':receiver})
     return render(request, 'beta_msg.html')
 
 def user_dashboard(request):
@@ -35,3 +37,11 @@ def user_account(request):
         'message': Message
     }
     return render(request, 'account.html', context)
+
+# Test for solana
+def solana_test(request):
+    Message = user.objects.all()
+    context = {
+        'message': Message
+    }
+    return render(request, 'solana.html', context)

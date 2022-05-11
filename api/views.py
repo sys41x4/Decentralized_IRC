@@ -3,7 +3,7 @@ from ctypes import addressof
 from logging import exception
 import os
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from api.models import api
@@ -590,9 +590,7 @@ def fetch_messages(request):
 
             output = f"Messages Fetched Successfully\nTotal {total_msg_count} Messages fetched between {fetcher} & {receiver}"
 
-            return JsonResponse({'msg_status': msg_status[1],  'color': color[1], 'output': output, 'message_data':ordered_message_data})
-
-
+            return JsonResponse({'msg_status': msg_status[1], 'chatroom_id': 'test','color': color[1], 'output': output, 'message_data':ordered_message_data})
 
         except:
                 output = "An ERROR occured\nMessages are not fetched Successfully"
@@ -669,6 +667,15 @@ def send_msg(request):
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'error' : f"Error : {err=}"})
 
     return JsonResponse({'Response Code':200})
+
+@csrf_protect
+def chat_ids(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user = data['user']
+        res = {"chats":{"test":['0x68237960f18f2b3a1555a39cd3427c52b98ad10b','0xf7eB78Ed74e17A775098f3f8ADda69b13942f96b']}}
+        return JsonResponse(res)
+
 @csrf_protect
 #@csrf_exempt
 def set_wallet_session(request):
@@ -679,4 +686,39 @@ def set_wallet_session(request):
 
     return JsonResponse({'Response Code':200})
 
+# Fetch messages from etherium explorer and return JSON.
+@csrf_exempt
+def getMessages(request):
+    try:
+        if request.method == 'POST' and request.content_type == 'application/json':
+            data = json.loads(request.body)
+            wallet_address = data['wallet_address']
+            transactions = requests.get(f'https://api-kovan.etherscan.io/api?module=account&action=txlist&address={wallet_address}&startblock=0&endblock=99999999&sort=asc&apikey=V9EAM35F8F1RGRD3EPJAQQ4N97K9M37GMV',headers={"User-Agent":"IRC-DEV"})
+            transactions_json = transactions.json()
+            transactions_json_len = len(transactions_json['result'])
+            transactions_dict ={"sent":{},"received":{}}
+            for i in range(0,transactions_json_len):
+                sender_address = transactions_json['result'][i]['from']
+                receiver_address = transactions_json['result'][i]['to']
+                message_hex = transactions_json['result'][i]['input']
+                if sender_address == wallet_address:
+                    if receiver_address not in transactions_dict['sent']:
+                        transactions_dict['sent'][receiver_address] = []
+                        transactions_dict['sent'][receiver_address].append(message_hex)
+                    else:
+                        transactions_dict['sent'][receiver_address].append(message_hex)
+                elif receiver_address == wallet_address:
+                    if sender_address not in transactions_dict['received']:
+                        transactions_dict['received'][sender_address] = []
+                        transactions_dict['received'][sender_address].append(message_hex)
+                    else:
+                        transactions_dict['sent'][sender_address].append(message_hex)
+            response_json = {"result":transactions_dict}
+            return JsonResponse(response_json)
+        else:
+            return HttpResponseBadRequest()
+    except:
+        return HttpResponseServerError("Something Went Wrong")
+    return JsonResponse({'Response Code':200})
+  
 gen_chain_list()

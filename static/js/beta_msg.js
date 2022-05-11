@@ -1,3 +1,5 @@
+var chatSocket;
+
 $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
 $("#profile-img").click(function() {
@@ -19,12 +21,16 @@ $("#status-options ul li").click(function() {
 	
 	if($("#status-online").hasClass("active")) {
 		$("#profile-img").addClass("online");
+		broadcaststatus('online')
 	} else if ($("#status-away").hasClass("active")) {
 		$("#profile-img").addClass("away");
+		broadcaststatus("away")
 	} else if ($("#status-busy").hasClass("active")) {
 		$("#profile-img").addClass("busy");
+		broadcaststatus("busy")
 	} else if ($("#status-offline").hasClass("active")) {
 		$("#profile-img").addClass("offline");
+		broadcaststatus("offline")
 	} else {
 		$("#profile-img").removeClass();
 	};
@@ -190,6 +196,37 @@ function getRandomProfileimg() {
 	return ProfileImgList[Math.floor(Math.random() * ProfileImgList.length)];
 };
 
+//fetch user's chats
+
+window.onload = function fetch_chat_ids(fetcher){
+	$.ajax({
+		data: JSON.stringify({user:fetcher}),
+		type: 'POST',
+		url: '/api/chat_ids',
+		dataType: 'json',
+		contentType: 'application/json',
+		headers:{'X-CSRFToken':csrf_token}
+	}).done(function(data){
+		console.log(data)
+		for(i=0;i<Object.keys(data.chats).length;i++){
+			current_chat_id = Object.keys(data.chats)[i];
+			console.log(current_chat_id)
+			users_in_room = data.chats[current_chat_id]
+			for(j=0;j<users_in_room.length;j++){
+				current_user = users_in_room[j]
+				console.log(users_in_room)
+				console.log(current_user)
+				console.log(currentAccount!=current_user)
+				if(currentAccount != current_user){
+					receivers_addr = current_user
+				}
+			}
+			console.log(current_chat_id,currentAccount,receivers_addr)
+			init_ws(current_chat_id,currentAccount,receivers_addr)
+		}
+	})
+}
+
 
 // Fetch Communication Messages Between Sender and Receiver
 function fetch_message(fetcher, receiver){
@@ -204,10 +241,72 @@ function fetch_message(fetcher, receiver){
 		dataType: 'json',
 		contentType: 'application/json',
 		headers: {fetcher : fetcher, 'X-CSRFToken':csrf_token}
-	}).done(function(data) {
-	$('#output').text(data.output).show();
+	}).done(function(data){displaymessages(data,fetcher,receiver,fromws=false)});
+};
 
+// initiate WS connection
+
+function init_ws(roomName,fetcher,receiver){
+
+	chatSocket = new WebSocket(
+		'ws://'
+		+ window.location.host
+		+ '/ws/'
+		+ roomName
+		+ '/'
+	);
+	
+	chatSocket.onmessage = function(e){
+		data = JSON.parse(e.data)
+		console.log(data)
+		console.log("message event received.")
+		if(data.message.msg_status){
+		displaymessages(data,fetcher,receiver,fromws=true)
+		}
+		else if(data.message.contact_status){
+			updateContactStatus(data.message)
+		}
+	}
+
+	chatSocket.onclose = function(e) {
+		console.error('Chat socket closed unexpectedly');
+	};
+}
+
+function send_ws_message(payload){
+	console.log("sending message event");
+	chatSocket.send(JSON.stringify(payload));
+}
+
+//Update incomming contact status using websockets
+
+function updateContactStatus(data){
+	console.log("updating contact status")
+	contact = Object.keys(data.contact_status)[0]
+	console.log(contact)
+	if(contact!=currentAccount){
+	contact_status = data.contact_status[contact]
+	console.log(contact_status)
+	document.querySelector('[address-receiver="'+contact+'"]').children[0].children[0].className = "contact-status "+contact_status 
+	}
+}
+
+// BroadCast user's status
+function broadcaststatus(status){
+	payload = {"type":"chat_message","message":{"contact_status":{[currentAccount]:status}}}
+	send_ws_message(payload)
+}
+
+// updating code to display messages on the UI throught a common function... Required for WebSockets support.
+// fromws varible tells if the message was sent is from websocket of not.
+function displaymessages(data,fetcher,receiver,fromws=false) {
+	console.log(data,fetcher,receiver)
+	$('#output').text(data.output).show();
 	// Show Message Status Success/Failure
+	if(fromws){
+		data = data.message;
+		//console.log(data);
+	}
 	if (data.message_data == undefined){
 		console.log(data.output);
 	}
@@ -224,15 +323,15 @@ function fetch_message(fetcher, receiver){
 		// 	document.getElementById("msg-send-confirm").textContent = '';
 		// }, 1000);
 
-		msg_data = data.message_data
-
+		msg_data = data.message_data  
+		//console.log("getting message data")
 		if (msg_data.length!=0){
-
-		
 			for (let i = 0; i < msg_data.length; i++) {
 				
-				
-				if (msg_data[i]['sender'] == fetcher){
+				//console.log("looping")
+				//console.log(msg_data[i]['sender'].toUpperCase() == fetcher.toUpperCase())
+				if (msg_data[i]['sender'].toUpperCase() == fetcher.toUpperCase()){
+					console.log("sender is fetcher")
 					$('<li class="sent"><img src="'+$("#profile-img")[0]['src']+'" alt="" /><p>' + msg_data[i]['message'] + '</p></li>').appendTo($('.messages ul'));
 					// $('#message').val(null);
 					if (i+1 == msg_data.length){
@@ -240,24 +339,19 @@ function fetch_message(fetcher, receiver){
 					};
 					
 				}
-				else if (msg_data[i]['sender'] == receiver){
+				else if (msg_data[i]['sender'].toUpperCase() == receiver.toUpperCase()){
+					console.log("sender is receiver")
 					$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + msg_data[i]['message'] + '</p></li>').appendTo($('.messages ul'));
 					if (i+1 == msg_data.length){
 						var last_msg_sndr =  '';
 					};
-				};
-				
-				
+				};	
 			}
 			
 			$('.'+receiver+' .wrap .meta .preview')[0]['innerHTML'] = '<span>'+last_msg_sndr+'</span>' + msg_data[msg_data.length-1]['message']
 			$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 		}
 	}
-	
-
-	
-	});
 }
 
 // Generate Random Static Sender Pic
@@ -324,7 +418,6 @@ function newContact() {
     if($.trim(new_Receiver_Address) == '' || $.trim(new_Receiver_Name) == ''){
         return false;
     }
-
 
 	$.ajax({
 		data : JSON.stringify({
@@ -412,7 +505,7 @@ function newContact() {
 	// $('.contact.active .preview').html('<span>You: </span>' + message);
 	// $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 };
-
+/*
 function newMessage() {
 	message = $(".message-input input").val();
 	if($.trim(message) == '') {
@@ -427,7 +520,7 @@ function newMessage() {
 $('.submit').click(function() {
   newMessage();
 });
-
+*/
 // $(window).on('keydown', function(e) {
 //   if (e.which == 13) {
 //     newMessage();
@@ -708,7 +801,7 @@ function update_status(status_detail) {
 function view_conversation(rcvr_addr) {
 // $('.contact').click(function() {
 	// console.log($(data).attr("address-receiver"));
-	
+	rcvr_addr = rcvr_addr;
 	rcvr_name = $('.'+rcvr_addr+' .wrap .meta .name')[0]['innerText'];
 	rcvr_img = $('.'+rcvr_addr+' .wrap img')[0]['currentSrc'];
 

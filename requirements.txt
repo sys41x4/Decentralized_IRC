@@ -2,3 +2,4 @@ django
 django-npm
 pyyaml
 web3
+channels-redis
