@@ -198,7 +198,8 @@ function getRandomProfileimg() {
 
 //fetch user's chats
 
-window.onload = function fetch_chat_ids(fetcher){
+// window.onload = function fetch_chat_ids(fetcher){
+function fetch_chat_ids(){
 	// console.log(fetcher);
 	$.ajax({
 		data: JSON.stringify({user:ethereum.selectedAddress.toUpperCase()}),
@@ -264,7 +265,7 @@ function init_ws(roomName,fetcher,receiver){
 		console.log(data)
 		console.log("message event received.")
 		if(data.message.msg_status){
-		displaymessages(data,fetcher,receiver,fromws=true)
+			displaymessages(data,ethereum.selectedAddress.toUpperCase(),receiver,fromws=true)
 		}
 		else if(data.message.contact_status){
 			updateContactStatus(data.message)
@@ -593,6 +594,7 @@ function fetch_StartUp_Data(){
 
 		$('#uuid')[0].textContent = data.basic_UserData[0];
 		uuid = data.basic_UserData[0];
+		$('#user-Full_Name')[0].innerHTML = data.basic_UserData[1]['name'];
 		for (let i = 0; i < connected_wallets.length; i++) {
 
 			if (connected_wallets[i]['wallet_address'] == data.basic_UserData[1]['primary_wallet_address']){
@@ -772,6 +774,7 @@ function settings(){
 		$(".settings .settings-info .wrap-settings-info .settings-info-form .wrap-info-input input")[0].value = ethereum.selectedAddress;
 		
 		// Fetch Basic User Data
+		$('#CurrentUser_WalletAddresses')[0].innerHTML='';
 		fetch_StartUp_Data();
 	}
 	else if ($(".settings")[0].style.display == 'block'){
@@ -1005,6 +1008,7 @@ function load_on_startup(){
 
 
 	fetch_StartUp_Data();
+	fetch_chat_ids();
 	fetch_contactList();
 	// $.when(fetch_StartUp_Data()).then(function(){
 	// 	fetch_contactList();
