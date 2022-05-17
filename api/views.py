@@ -1,10 +1,6 @@
 from ast import In
-from base64 import encode
-from ctypes import addressof
 from logging import exception
 import os
-from pickletools import read_uint1
-from turtle import RawTurtle
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
