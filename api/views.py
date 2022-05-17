@@ -1,7 +1,11 @@
 from ast import In
+from base64 import encode
 from ctypes import addressof
 from logging import exception
 import os
+from pickletools import read_uint1
+from turtle import RawTurtle
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.views.decorators.csrf import csrf_protect
@@ -16,7 +20,7 @@ import subprocess
 import json, yaml
 from web3 import Web3
 import requests
-
+from jwt import encode as jwt_encode
 
 
 network_ID_data={}
@@ -712,6 +716,19 @@ def set_wallet_session(request):
         wallet_address = data['wallet_address']
 
     return JsonResponse({'Response Code':200})
+
+# Fetch JWTs for chat room authentication.
+# Need to first verify if the user has access to the chat room whose token is request. Verification needs to be done using the database
+# If no access, reject the request.
+# JWT's payload will be of format {"rooms":[<list of all the rooms, checked using database>]}
+#Room name payload format : UUID
+@csrf_protect
+def fetch_chat_token(request):
+    if request.method == 'POST': # and request.headers['wallet-address'] in access_to_rooms['room']
+        encoded_data = jwt_encode({'rooms':['test']},settings.SECRET_KEY,algorithm='HS256')
+        token = {"access_token":encoded_data}
+        return JsonResponse(token)
+
 
 # # Fetch messages from etherium explorer and return JSON.
 # @csrf_exempt
