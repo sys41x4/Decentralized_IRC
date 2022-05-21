@@ -7,7 +7,7 @@ from django.conf import settings
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.token = parse_qs(self.scope["query_string"].decode("utf8"))["token"][0]
-        decoded_jwt = jwt_decode(self.token,settings.SECRET_KEY,algorithms=["HS256"])
+        decoded_jwt = jwt_decode(self.token,settings.CHAT_SECRET_KEY,algorithms=["HS256"])
         rooms = decoded_jwt['rooms']
         if rooms:
             for i in rooms:
