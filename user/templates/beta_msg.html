@@ -80,7 +80,7 @@
 	<div id="sidepanel">
 		<div id="profile">
 			<div class="wrap">
-				<img id="profile-img" src="https://avatars.githubusercontent.com/u/62654117?v=4" class="online" alt="" />
+				<img id="profile-img" src="" class="online" alt="" />
 				<p id="user-Full_Name">Arijit Bhowmick</p>
 				<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
 				<div id="status-options">
@@ -92,7 +92,8 @@
 					</ul>
 				</div>
 				<div id="expanded">
-                    <input readonly name="wallet_address" type="text" id="wallet_address">
+                    <input readonly name="wallet_address" type="text" id="wallet_address"><br>
+					<a href="/api/logout" style="padding: 0 0 0 100px;">Log Out</a>
 					<!-- <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
 					<input name="twitter" type="text" value="mikeross" />
 					<label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
@@ -244,6 +245,8 @@
 									<!-- <input style="margin-top: 30px" class="btn btn-primary btn-lg btn-block" type="submit" value="Download Your Data"> -->
 									<br>
 									<button id="downloadYourData" onclick=""><span>Download Your Data</span></button>
+									<br>
+    								<a href="/api/logout" style="background-color: rgb(22, 24, 24); padding: 10px;">Log Out</a>
 								</div>
 							</form>
 				
