@@ -1,4 +1,5 @@
 var chatSocket;
+var chat_jwt;
 
 $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
@@ -226,7 +227,7 @@ function fetch_chat_ids(){
 				}
 			}
 			console.log(current_chat_id,currentAccount,receivers_addr)
-			init_ws(current_chat_id,currentAccount,receivers_addr)
+			init_ws(current_chat_id,receivers_addr)
 		}
 	})
 }
@@ -248,16 +249,42 @@ function fetch_message(fetcher, receiver){
 	}).done(function(data){displaymessages(data,ethereum.selectedAddress.toUpperCase(),receiver,fromws=false)});
 };
 
+//Get Chat JWTs
+
+function fetch_chat_jwt(){
+	/*
+	fetch('/api/fetch_chat_token',{
+		method:'POST',
+		headers:{'X-CSRFToken':csrf_token,'Content-type':"application/json"}
+	})
+	.then((response) => response.json())
+	.then((responseData) => {
+	chat_jwt = responseData.access_token
+	console.log("Successfully Fetch Chat jwt",chat_jwt);
+	return responseData;
+	})
+	.catch(error => console.warn(error));
+}
+*/
+	$.ajax({
+		type:'POST',
+		url:'/api/fetch_chat_token',
+		dataType:'json',
+		contentType:'application/json',
+		headers:{'X-CSRFToken':csrf_token}
+	}).done(function(data){console.log("Successfully Fechted Chat JWT", data);chat_jwt=data.access_token})
+}
+
+
 // initiate WS connection
 
-function init_ws(roomName,fetcher,receiver){
+function init_ws(roomName,receiver){
 
 	chatSocket = new WebSocket(
 		'ws://'
 		+ window.location.host
 		+ '/ws/'
-		+ roomName
-		+ '/'
+		+'?token=' + chat_jwt
 	);
 	
 	chatSocket.onmessage = function(e){
@@ -1006,7 +1033,7 @@ function load_on_startup(){
 	// 	fetch_contactList()
 	// );
 
-
+	fetch_chat_jwt();
 	fetch_StartUp_Data();
 	fetch_chat_ids();
 	fetch_contactList();
