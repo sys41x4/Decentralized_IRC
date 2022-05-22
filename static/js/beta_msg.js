@@ -609,6 +609,8 @@ function displaymessages(data,fetcher,receiver_wallet_addresses,fromws=false) {
 						// if (i+1 == msg_data.length){
 						var last_msg_sndr = 'You: ';
 						// };
+						$('.contact.active .preview').html('<span>'+last_msg_sndr+'</span>' + pt_msg);
+						$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 						
 					}
 					// else if (msg_data[i]['sender'].toUpperCase() in receiver_wallet_addresses){
@@ -616,28 +618,42 @@ function displaymessages(data,fetcher,receiver_wallet_addresses,fromws=false) {
 					else if (msg_data[i]['receiver'].includes(fetcher.toUpperCase())){
 						console.log("sender is receiver")
 
-						window.startupData['communication_data'][contact_basic_data['room_type']][contact_basic_data['room']]['contact'][msg_data[i]['timestamp']] = {'data': msg_data[i]['message']}
+						window.startupData['communication_data'][msg_data[i]['room_type']][msg_data[i]['room']]['contact'][msg_data[i]['timestamp']] = {'data': msg_data[i]['message']}
 						var pt_msg = hex2ascii(msg_data[i]['message']);
-						$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + pt_msg + '</p></li>').appendTo($('.messages ul'));
-						// if (i+1 == msg_data.length){
 						var last_msg_sndr =  '';
+						if (msg_data[i]['room']==contact_basic_data['room']){
+
+							console.log(msg_data, contact_basic_data, 'line 623')
+							
+							// window.startupData['communication_data'][contact_basic_data['room_type']][contact_basic_data['room']]['contact'][msg_data[i]['timestamp']] = {'data': msg_data[i]['message']}
+							$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + pt_msg + '</p></li>').appendTo($('.messages ul'));
+							$('.contact.active .preview').html('<span>'+last_msg_sndr+'</span>' + pt_msg);
+							$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+						}
 							
 						// };
 					}
 					// else if (fetcher.toUpperCase() in receiver_wallet_addresses){
 					else if (receiver_wallet_addresses.includes(fetcher.toUpperCase())){
 					
-						window.startupData['communication_data'][contact_basic_data['room_type']][contact_basic_data['room']]['contact'][msg_data[i]['timestamp']] = {'data': msg_data[i]['message']}
+						window.startupData['communication_data'][msg_data[i]['room_type']][msg_data[i]['room']]['contact'][msg_data[i]['timestamp']] = {'data': msg_data[i]['message']}
 						var pt_msg = hex2ascii(msg_data[i]['message']);
-						$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + pt_msg + '</p></li>').appendTo($('.messages ul'));
-						// if (i+1 == msg_data.length){
 						var last_msg_sndr =  '';
+						// window.startupData['communication_data'][contact_basic_data['room_type']][contact_basic_data['room']]['contact'][msg_data[i]['timestamp']] = {'data': msg_data[i]['message']}
+						if (msg_data[i]['room']==contact_basic_data['room']){
+							
+							$('<li class="replies"><img src="'+$(".contact-profile #receiver-img")[0]['src']+'" alt="" /><p>' + pt_msg + '</p></li>').appendTo($('.messages ul'));
+							$('.contact.active .preview').html('<span>'+last_msg_sndr+'</span>' + pt_msg);
+							$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+						}
+						
 				
 						// };
 					};
 					// // $('.'+receiver+' .wrap .meta .preview')[0]['innerHTML'] = '<span>'+last_msg_sndr+'</span>' + msg_data[msg_data.length-1]['message']
-					$('.contact.active .preview').html('<span>'+last_msg_sndr+'</span>' + pt_msg);
-					$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+					$('.contact.'+msg_data[i]['room']+' .preview').html('<span>'+last_msg_sndr+'</span>' + pt_msg);
+
+					
 				}
 			}
 			
