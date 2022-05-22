@@ -1,12 +1,13 @@
 from ast import In
 from ctypes import addressof
 from logging import exception
-import os
+import os, random
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from api.models import api
+import hashlib
 # from user.models import user
 import json
 import psycopg2
@@ -33,6 +34,20 @@ conn = psycopg2.connect(connect_str)
 
 # create a psycopg2 cursor that can execute queries
 cursor = conn.cursor()
+
+
+def gen_room_name(num):
+    hash_list = []
+    for i in range(num):
+        hash_list+=list(hashlib.md5(os.urandom(128)+os.urandom(128)).hexdigest())
+    
+    random.shuffle(hash_list)
+    
+    return ''.join(hash_list)
+
+# # Used during creation of new dm/group
+# # will Be used Later on
+# new_room = gen_room_name(2)
 
 
 def get_uuid(wallet_address, network_id):

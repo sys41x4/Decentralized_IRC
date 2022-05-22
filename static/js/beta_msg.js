@@ -302,6 +302,31 @@ function fetch_chat_ids(room_amount='indv'){
 	
 }
 
+//Get Chat JWTs
+var chat_jwt;
+function fetch_chat_jwt(){
+	/*
+	fetch('/api/fetch_chat_token',{
+		method:'POST',
+		headers:{'X-CSRFToken':csrf_token,'Content-type':"application/json"}
+	})
+	.then((response) => response.json())
+	.then((responseData) => {
+	chat_jwt = responseData.access_token
+	console.log("Successfully Fetch Chat jwt",chat_jwt);
+	return responseData;
+	})
+	.catch(error => console.warn(error));
+}
+*/
+	$.ajax({
+		type:'POST',
+		url:'/api/fetch_chat_token',
+		dataType:'json',
+		contentType:'application/json',
+		headers:{'X-CSRFToken':csrf_token}
+	}).done(function(data){console.log("Successfully Fechted Chat JWT", data);chat_jwt=data.access_token})
+}
 
 // Fetch Communication Messages Between Sender and Receiver
 // function fetch_message(fetcher, receiver){
@@ -346,6 +371,7 @@ function init_ws(roomName,fetcher,rcvr_wallet_addr_lst){
 		+ '/ws/'
 		+ roomName
 		+ '/'
+		+'?token=' + chat_jwt
 	);
 	
 	chatSocket.onmessage = function(e){
@@ -1330,7 +1356,8 @@ function load_on_startup(){
 
 	
 	// const start_data = startup_data().then(fetch_chat_ids()).catch((error) => {fetch_chat_ids()})
-	startup_data()
+	startup_data();
+	fetch_chat_jwt();
 	// fetch_chat_ids();
 		// fetch_chat_ids
 		// ).then(

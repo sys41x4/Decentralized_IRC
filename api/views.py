@@ -1,22 +1,29 @@
 from ast import In
 from ctypes import addressof
 from logging import exception
-import os
+from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest, HttpResponseServerError, request
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from api.models import api
 from user.models import user
 
 import time
 import uuid
+import os, random
 import binascii
 import subprocess
 import json, yaml
 from web3 import Web3
 import requests
 
+
+from jwt import encode as jwt_encode
+from hexbytes import HexBytes
+from eth_account.messages import encode_defunct
+from . import utils
+from .utils import is_logged_in # is_logged_in = decorator to check if user is logged in. Redirects to login page if not.
+# Custom decorator to check authentication: https://stackoverflow.com/questions/5469159/how-to-write-a-custom-decorator-in-django
 
 
 network_ID_data={}
@@ -63,6 +70,7 @@ def gen_chain_list():
 # rpcinfo_response = requests.get('https://rpc.info/static/js/main.chunk.js')
 # rpc_lists = json.loads(rpcinfo_response.text.split('const RPCS = [// avax')[1].split('\n\nvar _c;')[0])
 
+@is_logged_in
 @csrf_protect
 def chk_addr_validity(request):
     # Get RPC Network Details from https://rpc.info/
@@ -353,7 +361,7 @@ def fetch_uuid(request):
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
     return JsonResponse({'Response Code':200})
 
-
+@is_logged_in
 def fetch_startup_data(request):
     if request.method == "POST":
         try:
@@ -404,7 +412,7 @@ def fetch_startup_data(request):
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
     return JsonResponse({'Response Code':200})
 
-
+@is_logged_in
 def fetch_contacts(request):
     if request.method == "POST":
         try:
@@ -512,7 +520,7 @@ def fetch_indv_contact_details(request):
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
     return JsonResponse({'Response Code':200})
 
-
+@is_logged_in
 def fetch_paid_txn(request):
     if request.method == "POST":
         try:
@@ -603,6 +611,7 @@ def fetch_messages(request):
 def access_chk(request):
     return JsonResponse({'Response Code':200})
 
+@is_logged_in
 @csrf_protect
 #@csrf_exempt
 def send_msg(request):
@@ -702,7 +711,7 @@ def chat_ids(request):
                 
         
         
-
+# To delete
 @csrf_protect
 #@csrf_exempt
 def set_wallet_session(request):
@@ -747,5 +756,79 @@ def set_wallet_session(request):
 #     except:
 #         return HttpResponseServerError("Something Went Wrong")
 #     return JsonResponse({'Response Code':200})
-  
+
+
+# Fetch JWTs for chat room authentication.
+# Need to first verify if the user has access to the chat room whose token is request. Verification needs to be done using the database
+# If no access, reject the request.
+# JWT's payload will be of format {"rooms":[<list of all the rooms, checked using database>]}
+#Room name payload format : UUID
+
+@is_logged_in
+@csrf_exempt
+def fetch_chat_token(request):
+    if request.method == 'POST': # and request.headers['wallet-address'] in access_to_rooms['room']
+        encoded_data = utils.generate_auth_jwt(['test','test2'],'chat')
+        token = {"access_token":encoded_data}
+        return JsonResponse(token)
+
+## Web3 Authnetication view
+
+## Generate nonce
+def generate_nonce(request):
+    try:
+        nonce = (str(uuid.uuid5(uuid.NAMESPACE_DNS, str(os.urandom(128))))+'-'+str(uuid.uuid1())).split('-')
+        random.shuffle(nonce)
+        nonce = '-'.join(nonce)
+        # nonce = 'str(uuid.uuid4())'
+        response = HttpResponse(json.dumps({"nonce":nonce}), content_type='application/json')
+        response.set_cookie("nonce",value=nonce,httponly=True)
+        return response
+    except:
+        return JsonResponse({"error":"something went wrong"})
+
+# Authenticate
+#<change to csrf_protect>
+@csrf_protect
+def web3_authentication(request):
+    if request.method == 'POST' and request.content_type == 'application/json':
+        #try:
+        data = json.loads(request.body)
+        nonce = request.COOKIES['nonce']   #one time unique nonce
+        #nonce_hex = HexBytes(nonce)
+        signature = data['signature']   #signature
+        signatue_hex = HexBytes(signature)
+        print("signature hex",signatue_hex)
+        w3 = Web3(Web3.HTTPProvider(""))
+        message=encode_defunct(text=nonce) #encode msg
+        print("message",message)
+        user_address = data['wallet_address'].upper()
+        verified_address = w3.eth.account.recover_message(message,signature=signatue_hex).upper()
+        print("message verified",verified_address) #get account who generated the signature for this message
+        if verified_address == user_address: #check if address matches with user's address
+                # Perform DB operations here/ create account if the user is new, if not new but already exists, then authenticate 
+            jwt = utils.generate_auth_jwt({'UID':'UID_FROM_DATABASE','Wallet_address':user_address},'auth')
+            token_res = {"id_token":jwt,"redirect_uri":"/user/betamsg"}
+            res = HttpResponse(json.dumps(token_res), content_type="application/json")
+            res.set_cookie("id_token",value=jwt,httponly=True,secure=False) # id token = jwt !!CHANGE COOKIE FLAGS!! 
+            res.delete_cookie("nonce") #Delete Nonce if auth successfull
+            return res
+        else:
+            return JsonResponse({"error":"unable to authenticate at this time"})
+    else:
+        return HttpResponseBadRequest(JsonResponse({"error":"Bad Request"}))
+
+#change to csrf_protect
+@is_logged_in
+@csrf_exempt
+def logout(request):
+   # res = JsonResponse({"redirect_uri":"/"})
+   # Change to XHR, after implemnting logout button in common a js file
+    res = HttpResponseRedirect('/')
+    for i in request.COOKIES:
+        res.delete_cookie(i)
+    return res
+
+
+
 gen_chain_list()

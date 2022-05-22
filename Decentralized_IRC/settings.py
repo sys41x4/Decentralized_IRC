@@ -20,6 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-wb9(u-wy%e#lb=60d8udjs=((7gyi1$dz5%e1x-j$s#tgseffu'
+AUTH_SECRET_KEY = 'SOME-AUTH-JWT-SECRET--INSECURE!!'
+CHAT_SECRET_KEY = 'SOME-CHAT-JWT-SECRET--INSECURE!!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -27,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     '192.168.106.179',
+    'localhost'
 ]
 
 
