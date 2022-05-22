@@ -100,239 +100,239 @@ def chk_addr_validity(request):
     return JsonResponse({'Response Code':200})
 
 
-# def fetch_CurrentUser_walletAddresses(uuid, wallet_addr):
-uuid_linked_walletAddr={
-    '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9':'863dc52a-c39c-11ec-8b20-82304926de9b',
-    '0X283C3B6A4D84D457F1B6BB8FB947CFA432EFC293':'863dc52a-c39c-11ec-8b20-82304926de9b',
-    '0XFFE39E1461D0361C3D72658EF39AE76288C82622':'a149137f-c39b-11ec-81f4-82304926de9b',
-    '0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9':'a149137f-c39b-11ec-81f4-82304926de9b',
-    '0X68237960F18F2B3A1555A39CD3427C52B98AD10B':'6905735c-c511-11ec-a9f3-82304926de9b',
-    '0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B':'5fa6aee8-cf80-11ec-9735-82304926de9b',
+# # def fetch_CurrentUser_walletAddresses(uuid, wallet_addr):
+# uuid_linked_walletAddr={
+#     '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9':'863dc52a-c39c-11ec-8b20-82304926de9b',
+#     '0X283C3B6A4D84D457F1B6BB8FB947CFA432EFC293':'863dc52a-c39c-11ec-8b20-82304926de9b',
+#     '0XFFE39E1461D0361C3D72658EF39AE76288C82622':'a149137f-c39b-11ec-81f4-82304926de9b',
+#     '0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9':'a149137f-c39b-11ec-81f4-82304926de9b',
+#     '0X68237960F18F2B3A1555A39CD3427C52B98AD10B':'6905735c-c511-11ec-a9f3-82304926de9b',
+#     '0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B':'5fa6aee8-cf80-11ec-9735-82304926de9b',
 
-}
+# }
 
 
-basic_user_detail = {
-    '863dc52a-c39c-11ec-8b20-82304926de9b': {
-        'name':'Arijit Bhowmick',
-        'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-        'connected_wallets':[
-            {
-                'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-                'networkId':42,
-            },
+# basic_user_detail = {
+#     '863dc52a-c39c-11ec-8b20-82304926de9b': {
+#         'name':'Arijit Bhowmick',
+#         'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#         'connected_wallets':[
+#             {
+#                 'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#                 'networkId':42,
+#             },
 
-            {
-                'wallet_address':'0X283C3B6A4D84D457F1B6BB8FB947CFA432EFC293',
-                'networkId':42,
-            },
-        ]
+#             {
+#                 'wallet_address':'0X283C3B6A4D84D457F1B6BB8FB947CFA432EFC293',
+#                 'networkId':42,
+#             },
+#         ]
 
-    },
+#     },
 
-    'a149137f-c39b-11ec-81f4-82304926de9b': {
-        'name':'sys41x4',
-        'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
-        'connected_wallets':[
-            {
-                'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
-                'networkId':42,
-            },
+#     'a149137f-c39b-11ec-81f4-82304926de9b': {
+#         'name':'sys41x4',
+#         'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+#         'connected_wallets':[
+#             {
+#                 'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+#                 'networkId':42,
+#             },
 
-            {
-                'wallet_address':'0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9',
-                'networkId':42,
-            },
-        ]
-    },
+#             {
+#                 'wallet_address':'0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9',
+#                 'networkId':42,
+#             },
+#         ]
+#     },
 
-    '6905735c-c511-11ec-a9f3-82304926de9b': {
-        'name':'Suraj Disoja',
-        'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
-        'connected_wallets':[
-            {
-                'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
-                'networkId':42,
-            }
-        ]
-    },
+#     '6905735c-c511-11ec-a9f3-82304926de9b': {
+#         'name':'Suraj Disoja',
+#         'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+#         'connected_wallets':[
+#             {
+#                 'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+#                 'networkId':42,
+#             }
+#         ]
+#     },
 
-    '5fa6aee8-cf80-11ec-9735-82304926de9b' : {
-        'name':'ninetyn1ne',
-        'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
-        'connected_wallets':[
-            {
-                'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
-                'networkId':42,
-            }
-        ]
-    },
+#     '5fa6aee8-cf80-11ec-9735-82304926de9b' : {
+#         'name':'ninetyn1ne',
+#         'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+#         'connected_wallets':[
+#             {
+#                 'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+#                 'networkId':42,
+#             }
+#         ]
+#     },
 
-    'uNveRiF1eD_d4TA':{
-        'name':'',
-        'primary_wallet_address':'',
-        'connected_wallets':[
-            {
-                'wallet_address':'',
-                'networkId':'',
-            }
-        ]
-    }
-}
+#     'uNveRiF1eD_d4TA':{
+#         'name':'',
+#         'primary_wallet_address':'',
+#         'connected_wallets':[
+#             {
+#                 'wallet_address':'',
+#                 'networkId':'',
+#             }
+#         ]
+#     }
+# }
 
-contact_details = {
-    '863dc52a-c39c-11ec-8b20-82304926de9b': {
-        'totalContacts':3,
-        'contactsList':{
-            0:{
-                'name': 'sys41x4',
-                'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
-                'walletList':[
-                    {
-                        'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
-                        'networkId':42,
-                    },
+# contact_details = {
+#     '863dc52a-c39c-11ec-8b20-82304926de9b': {
+#         'totalContacts':3,
+#         'contactsList':{
+#             0:{
+#                 'name': 'sys41x4',
+#                 'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+#                         'networkId':42,
+#                     },
 
-                    {
-                        'wallet_address':'0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9',
-                        'networkId':42,
-                    }
+#                     {
+#                         'wallet_address':'0X8CCEF537C24864F566B29FA11ED0ADC113B7BAF9',
+#                         'networkId':42,
+#                     }
                     
-                ]
-            },
+#                 ]
+#             },
 
-            1:{
-                'name': 'Suraj Disoja',
-                'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
-                'walletList':[
-                    {
-                        'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
-                        'networkId':42,
-                    }
+#             1:{
+#                 'name': 'Suraj Disoja',
+#                 'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+#                         'networkId':42,
+#                     }
 
-                ]
-            },
+#                 ]
+#             },
 
-            2:{
-                'name': 'ninetyn1ne',
-                'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
-                'walletList':[
-                    {
-                        'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
-                        'networkId':42,
-                    }
+#             2:{
+#                 'name': 'ninetyn1ne',
+#                 'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+#                         'networkId':42,
+#                     }
 
-                ]
-            }
-        },
-    },
+#                 ]
+#             }
+#         },
+#     },
 
-    'a149137f-c39b-11ec-81f4-82304926de9b': {
-        'totalContacts':1,
-        'contactsList':{
-            0:{
-                'name': 'Arijit Bhowmick',
-                'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-                'walletList':[
-                    {
-                        'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-                        'networkId':42,
-                    }
-                ]
-            }
-        },
-    },
+#     'a149137f-c39b-11ec-81f4-82304926de9b': {
+#         'totalContacts':1,
+#         'contactsList':{
+#             0:{
+#                 'name': 'Arijit Bhowmick',
+#                 'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#                         'networkId':42,
+#                     }
+#                 ]
+#             }
+#         },
+#     },
         
-    '6905735c-c511-11ec-a9f3-82304926de9b': {
-        'totalContacts':3,
-        'contactsList':{
-            0:{
-                'name': 'Arijit Bhowmick',
-                'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-                'walletList':[
-                    {
-                        'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-                        'networkId':42,
-                    }
-                ]
-            },
+#     '6905735c-c511-11ec-a9f3-82304926de9b': {
+#         'totalContacts':3,
+#         'contactsList':{
+#             0:{
+#                 'name': 'Arijit Bhowmick',
+#                 'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#                         'networkId':42,
+#                     }
+#                 ]
+#             },
 
-            1:{
-                'name': 'sys41x4',
-                'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
-                'walletList':[
-                    {
-                        'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
-                        'networkId':42,
-                    }
-                ]
-            },
+#             1:{
+#                 'name': 'sys41x4',
+#                 'primary_wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0XFFE39E1461D0361C3D72658EF39AE76288C82622',
+#                         'networkId':42,
+#                     }
+#                 ]
+#             },
 
-            2:{
-                'name': 'ninetyn1ne',
-                'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
-                'walletList':[
-                    {
-                        'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
-                        'networkId':42,
-                    }
-                ]
-            }
-        },
+#             2:{
+#                 'name': 'ninetyn1ne',
+#                 'primary_wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0XF7EB78ED74E17A775098F3F8ADDA69B13942F96B',
+#                         'networkId':42,
+#                     }
+#                 ]
+#             }
+#         },
 
-    },
+#     },
 
-    '5fa6aee8-cf80-11ec-9735-82304926de9b': {
-        'totalContacts':2,
-        'contactsList':{
-            0:{
-                'name': 'Arijit Bhowmick',
-                'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-                'walletList':[
-                    {
-                        'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
-                        'networkId':42,
-                    }
-                ]
-            },
+#     '5fa6aee8-cf80-11ec-9735-82304926de9b': {
+#         'totalContacts':2,
+#         'contactsList':{
+#             0:{
+#                 'name': 'Arijit Bhowmick',
+#                 'primary_wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
+#                         'networkId':42,
+#                     }
+#                 ]
+#             },
 
-            1:{
-                'name': 'Suraj Disoja',
-                'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
-                'walletList':[
-                    {
-                        'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
-                        'networkId':42,
-                    }
+#             1:{
+#                 'name': 'Suraj Disoja',
+#                 'primary_wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+#                 'walletList':[
+#                     {
+#                         'wallet_address':'0X68237960F18F2B3A1555A39CD3427C52B98AD10B',
+#                         'networkId':42,
+#                     }
 
-                ]
-            }
-        },
+#                 ]
+#             }
+#         },
 
-    },
+#     },
 
-    'UNv3RifiEd_DA74': {
-        'totalContacts':0,
-        'contactsList':{},
+#     'UNv3RifiEd_DA74': {
+#         'totalContacts':0,
+#         'contactsList':{},
 
-    },
-}
+#     },
+# }
 
 
-communication_data = {
+# communication_data = {
 
-    '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9-0XFFE39E1461D0361C3D72658EF39AE76288C82622':{
-        1650707120.936152: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':0, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
-        1650707282.4517663: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':1, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
-        1650707328.6830337: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':2, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
-        1650707338.0125976: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':3, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
-        1650707348.8427203: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':4, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
-        1650707156.6189778: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':0, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
-        1650707290.8573165: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':1, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
-    },
+#     '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9-0XFFE39E1461D0361C3D72658EF39AE76288C82622':{
+#         1650707120.936152: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':0, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hello Man Whats Up', 'networkId':42, 'timestamp':1650707120.936152},
+#         1650707282.4517663: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':1, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'What\'s going on ?', 'networkId':42, 'timestamp':1650707282.4517663},
+#         1650707328.6830337: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':2, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'I am just watching a movie...', 'networkId':42, 'timestamp':1650707328.6830337},
+#         1650707338.0125976: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':3, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Hey Man Are You Still there ?', 'networkId':42, 'timestamp':1650707338.0125976},
+#         1650707348.8427203: {'sender':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'nonce':4, 'receiver':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'message':'Mannn.. Again you are offline ... -_- ', 'networkId':42, 'timestamp':1650707348.8427203},
+#         1650707156.6189778: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':0, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'I am good what\'s you doing ? ', 'networkId':42, 'timestamp':1650707156.6189778},
+#         1650707290.8573165: {'sender':'0XFFE39E1461D0361C3D72658EF39AE76288C82622', 'nonce':1, 'receiver':'0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9', 'message':'Nothing much, Just chilling with laptop', 'networkId':42, 'timestamp':1650707290.8573165},
+#     },
     
     
-}
+# }
 
 def fetch_uuid(request):
     if request.method == "POST":
@@ -684,7 +684,7 @@ def chat_ids(request):
         # }
 
         res = {
-            '06d00a2cd16b11ecb96682304926de9b':[
+            '0315c67d2abd831a0e3cb5bf1b1393cf8dfe3df298964ef66b96ac2194c19504':[
                 '0XD17D369FFFCD92E713CF482E6ECEDA693BF7C8B9',
                 '0XFFE39E1461D0361C3D72658EF39AE76288C82622'
             ],
