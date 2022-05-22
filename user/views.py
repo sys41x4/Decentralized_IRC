@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from user.models import user
 from django.shortcuts import redirect, render
 from api.utils import is_logged_in

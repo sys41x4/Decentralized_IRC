@@ -17,7 +17,6 @@ import json, yaml
 from web3 import Web3
 import requests
 
-
 from jwt import encode as jwt_encode
 from hexbytes import HexBytes
 from eth_account.messages import encode_defunct
@@ -25,10 +24,12 @@ from . import utils
 from .utils import is_logged_in # is_logged_in = decorator to check if user is logged in. Redirects to login page if not.
 # Custom decorator to check authentication: https://stackoverflow.com/questions/5469159/how-to-write-a-custom-decorator-in-django
 
-
 network_ID_data={}
 msg_status = {0:'FAILED', 1:'SUCCESS'}
 color = {0:'#e74c3c', 1:'#2ecc71'}
+
+
+#Custom decorator to check authentication: https://stackoverflow.com/questions/5469159/how-to-write-a-custom-decorator-in-django
 
 def gen_chain_list():
     global network_ID_data
@@ -342,6 +343,7 @@ def chk_addr_validity(request):
     
 # }
 
+@is_logged_in
 def fetch_uuid(request):
     if request.method == "POST":
         try:
@@ -461,7 +463,7 @@ def fetch_contacts(request):
                 return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
     return JsonResponse({'Response Code':200})
 
-
+@is_logged_in
 def fetch_indv_contact_details(request):
     if request.method == "POST":
         try:
@@ -538,6 +540,7 @@ def fetch_paid_txn(request):
             return JsonResponse({'msg_status': msg_status[0],  'color': color[0], 'output': output})
     return JsonResponse({'Response Code':200})
 
+@is_logged_in
 def fetch_messages(request):
     if request.method == "POST":
         try:
@@ -613,7 +616,6 @@ def access_chk(request):
 
 @is_logged_in
 @csrf_protect
-#@csrf_exempt
 def send_msg(request):
 
     # Message = api.objects.all()
@@ -677,6 +679,7 @@ def send_msg(request):
 
     return JsonResponse({'Response Code':200})
 
+@is_logged_in
 @csrf_protect
 def chat_ids(request):
     if request.method == 'POST':
@@ -721,6 +724,21 @@ def set_wallet_session(request):
         wallet_address = data['wallet_address']
 
     return JsonResponse({'Response Code':200})
+
+# Fetch JWTs for chat room authentication.
+# Need to first verify if the user has access to the chat room whose token is request. Verification needs to be done using the database
+# If no access, reject the request.
+# JWT's payload will be of format {"rooms":[<list of all the rooms, checked using database>]}
+#Room name payload format : UUID
+
+@is_logged_in
+@csrf_exempt
+def fetch_chat_token(request):
+    if request.method == 'POST': # and request.headers['wallet-address'] in access_to_rooms['room']
+        encoded_data = utils.generate_auth_jwt(['test','test2'],'chat')
+        token = {"access_token":encoded_data}
+        return JsonResponse(token)
+
 
 # # Fetch messages from etherium explorer and return JSON.
 # @csrf_exempt
@@ -828,7 +846,5 @@ def logout(request):
     for i in request.COOKIES:
         res.delete_cookie(i)
     return res
-
-
 
 gen_chain_list()
