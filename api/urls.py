@@ -12,6 +12,7 @@ urlpatterns = [
     path("fetch_uuid", views.fetch_uuid, name="fetch_uuid"),
     path("fetch_indv_contact_details", views.fetch_indv_contact_details, name="fetch_indv_contact_details"),
     path("chat_ids",views.chat_ids,name="fetch_chat_ids"),
+
     path('fetch_chat_token',views.fetch_chat_token,name="fetch_chat_tokens"),
     path('web3login',views.web3_authentication,name="web3_authentication"),
     path('generate_nonce',views.generate_nonce,name="generate_nonce"),

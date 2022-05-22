@@ -8,6 +8,6 @@ urlpatterns = [
     path("account", views.user_account, name="user_account"),
     path("homepage", views.homepage, name="homepage"),
     path("betamsg", views.beta_message, name="beta_message"),
-    path("solana",views.solana_test,name="solana_test" ),
-    path('login',views.login,name="login_handler")
+    path("solana",views.solana_test,name="solana_test"),
+    path('login',views.login,name="login_handler"),
 ]

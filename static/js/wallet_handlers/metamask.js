@@ -170,8 +170,11 @@ function get_api_response(err_occur){
 
         if (data.msg_status=='SUCCESS'){
             // PUSH data to IPFS & WEB2 Storage
-            payload = {"type":"chat_message","message":{"msg_status": "SUCCESS", "color": "#2ecc71", "output": "Message Sent Successfully", "message_data": [{"sender": currentAccount, "nonce": 0, "receiver": receiver, "message": message, "networkId": 42, "timestamp": new Date().getTime()}]}}
-            send_ws_message(payload);
+            // payload = {"type":"chat_message","message":{"msg_status": "SUCCESS", "color": "#2ecc71", "output": "Message Sent Successfully", "message_data": [{"sender": currentAccount, "nonce": 0, "receiver": receiver, "message": message, "networkId": 42, "timestamp": new Date().getTime()}]}}
+            // payload = {"type":"chat_message","message":{"msg_status": "SUCCESS", "color": "#2ecc71", "output": "Message Sent Successfully", "message_data": [{"sender": currentAccount, "nonce": 0, "receiver": receiver, "message": message, "networkId": 42, "timestamp": new Date().getTime()}]}}
+            // send_ws_message(payload);
+            send_ws_message(message);
+
             $.ajax({
                 data : JSON.stringify({
                    sender : g_wallet_address,
@@ -493,6 +496,8 @@ function handleAccountsChanged(accounts) {
     }
     load_on_startup();
     console.log('WalletAddress in HandleAccountChanged = '+currentAccount);
+    
+    // startup_data();
     // fetch_contactList();
     // Function Exist in 'beta_msg.js' file
     

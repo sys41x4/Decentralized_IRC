@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from user.models import user
+from django.shortcuts import redirect, render
 from api.utils import is_logged_in
 
 def homepage(request):
@@ -9,6 +10,7 @@ def homepage(request):
 def beta_message(request):
     # receiver = request.GET['r']
     # return render(request, 'beta_msg.html',{'recv':receiver})
+    # return render(request, 'beta_msg.html')
     if 'id_token' in request.COOKIES:
         return render(request, 'beta_msg.html')
     else:
@@ -20,6 +22,7 @@ def user_dashboard(request):
     # context = {
     #     'message': Message
     # }
+    # return render(request, 'dashboard.html')
     if 'id_token' in request.COOKIES:
         return render(request, 'dashboard.html')
     else:
@@ -31,6 +34,7 @@ def message_page(request):
     context = {
         'message': Message
     }
+    # return render(request, 'message.html', context)
     if 'id_token' in request.COOKIES:
         return render(request, 'message.html')
     else:
@@ -42,6 +46,7 @@ def metamask_message_page(request):
     context = {
         'message': Message
     }
+    # return render(request, 'metamask_message.html', context)
     if 'id_token' in request.COOKIES:
         return render(request, 'metamask_message.html')
     else:
@@ -54,6 +59,7 @@ def user_account(request):
     context = {
         'message': Message
     }
+    # return render(request, 'account.html', context)
     if 'id_token' in request.COOKIES:
         return render(request, 'account.html')
     else:

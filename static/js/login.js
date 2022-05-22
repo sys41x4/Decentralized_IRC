@@ -70,7 +70,7 @@ window.onload = function() {
         })
     }
 
-    
+
 }
 
 var acc  =  async function getAccount() {
